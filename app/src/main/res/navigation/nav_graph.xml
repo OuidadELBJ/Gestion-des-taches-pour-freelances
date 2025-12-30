@@ -2,53 +2,58 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/projectListFragment">
+    app:startDestination="@id/dashboardFragment">
+
+    <!-- Dashboard -->
+<fragment
+android:id="@+id/dashboardFragment"
+android:name="com.example.freelance.DashboardFragment"
+android:label="Dashboard" />
 
     <!-- Liste des projets -->
-    <fragment
-        android:id="@+id/projectListFragment"
-        android:name="com.example.freelance.ProjectListFragment"
-        android:label="Projets">
+<fragment
+android:id="@+id/projectListFragment"
+android:name="com.example.freelance.ProjectListFragment"
+android:label="Projets">
 
-        <!-- ✅ Action de navigation vers le détail projet -->
-        <action
-            android:id="@+id/action_projectListFragment_to_projectDetailFragment"
-            app:destination="@id/projectDetailFragment" />
-    </fragment>
+<action
+    android:id="@+id/action_projectListFragment_to_projectDetailFragment"
+    app:destination="@id/projectDetailFragment" />
+</fragment>
 
     <!-- Timer -->
-    <fragment
-        android:id="@+id/timerFragment"
-        android:name="com.example.freelance.TimerFragment"
-        android:label="Timer" />
+<fragment
+android:id="@+id/timerFragment"
+android:name="com.example.freelance.TimerFragment"
+android:label="Timer" />
 
     <!-- Paiements -->
-    <fragment
-        android:id="@+id/paymentsFragment"
-        android:name="com.example.freelance.PaymentsFragment"
-        android:label="Paiements" />
+<fragment
+android:id="@+id/paymentsFragment"
+android:name="com.example.freelance.PaymentsFragment"
+android:label="Paiements" />
 
     <!-- Détails projet -->
-    <fragment
-        android:id="@+id/projectDetailFragment"
-        android:name="com.example.freelance.ProjectDetailFragment"
-        android:label="Détails projet">
+<fragment
+android:id="@+id/projectDetailFragment"
+android:name="com.example.freelance.ProjectDetailFragment"
+android:label="Détails projet">
 
-        <!-- déjà présent -->
-        <argument
-            android:name="projectId"
-            app:argType="string" />
-        <argument
-            android:name="projectName"
-            app:argType="string" />
+<argument
+    android:name="projectId"
+    app:argType="string" />
 
-        <!-- NOUVEAU : client + deadline -->
-        <argument
-            android:name="projectClient"
-            app:argType="string" />
-        <argument
-            android:name="projectDeadlineText"
-            app:argType="string" />
-    </fragment>
+<argument
+    android:name="projectName"
+    app:argType="string" />
 
-</navigation>
+<argument
+    android:name="projectClient"
+    app:argType="string" />
+
+<argument
+    android:name="projectDeadlineText"
+    app:argType="string" />
+</fragment>
+
+    </navigation>
