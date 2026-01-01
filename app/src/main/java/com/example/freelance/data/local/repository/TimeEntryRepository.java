@@ -1,0 +1,60 @@
+package com.example.freelance.data.local.repository;
+
+import android.content.Context;
+
+import com.example.freelance.data.local.AppDatabase;
+import com.example.freelance.data.local.dao.TimeEntryDao;
+import com.example.freelance.data.local.entity.TimeEntry;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+public class TimeEntryRepository {
+
+    private final TimeEntryDao timeEntryDao;
+    private final Executor executor;
+
+    public TimeEntryRepository(Context context) {
+        AppDatabase database = AppDatabase.getInstance(context);
+        this.timeEntryDao = database.timeEntryDao();
+        this.executor = Executors.newSingleThreadExecutor();
+    }
+
+    // -------------------------
+    // CRUD
+    // -------------------------
+
+    public void insert(TimeEntry entry) {
+        executor.execute(() -> timeEntryDao.insert(entry));
+    }
+
+    public void update(TimeEntry entry) {
+        executor.execute(() -> timeEntryDao.update(entry));
+    }
+
+    public void delete(TimeEntry entry) {
+        executor.execute(() -> timeEntryDao.delete(entry));
+    }
+
+    // -------------------------
+    // Queries métier
+    // -------------------------
+
+    public List<TimeEntry> getByTask(String taskId) {
+        return timeEntryDao.getByTask(taskId);
+    }
+
+    public TimeEntry getRunningTimeEntry() {
+        List<TimeEntry> running = timeEntryDao.getRunning();
+        return running.isEmpty() ? null : running.get(0);
+    }
+    public List<TimeEntry> getUnsynced() {
+        return timeEntryDao.getUnsynced();
+    }
+
+    public void stopTimer(String id, Date endTime, long duration, Date lastUpdated) {
+        executor.execute(() -> timeEntryDao.stopTimer(id, endTime, duration, lastUpdated));
+    }
+}
