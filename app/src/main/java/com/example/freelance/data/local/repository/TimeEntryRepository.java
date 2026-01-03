@@ -38,6 +38,18 @@ public class TimeEntryRepository {
         executor.execute(() -> timeEntryDao.delete(entry));
     }
 
+    //---------------------------
+    //READ
+    //--------------------------
+
+    public List<TimeEntry> getAll() {
+        return timeEntryDao.getAll();
+    }
+
+    public TimeEntry getById(String id) {
+        return timeEntryDao.getById(id);
+    }
+
     // -------------------------
     // Queries métier
     // -------------------------
@@ -54,7 +66,23 @@ public class TimeEntryRepository {
         return timeEntryDao.getUnsynced();
     }
 
+    public TimeEntry getLastByTask(String taskId) {
+        return timeEntryDao.getLastByTask(taskId);
+    }
+
+    //-----------------------
+    //Actions Timer
+    //-----------------------
+
     public void stopTimer(String id, Date endTime, long duration, Date lastUpdated) {
         executor.execute(() -> timeEntryDao.stopTimer(id, endTime, duration, lastUpdated));
+    }
+
+    public void pauseTimer(String id, Date lastUpdated) {
+        executor.execute(() -> timeEntryDao.pauseTimer(id, lastUpdated));
+    }
+
+    public void resumeTimer(String id, long pausedAccumulated, Date lastUpdated) {
+        executor.execute(() -> timeEntryDao.resumeTimer(id, pausedAccumulated, lastUpdated));
     }
 }

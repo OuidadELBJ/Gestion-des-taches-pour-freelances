@@ -23,6 +23,12 @@ public class Tache {
     private Date lastUpdated;
     private Boolean isSynced;
 
+    private long estimatedMillis; // estimation durée tâche
+
+    private boolean reminderEnabled;
+    private boolean useDefaultOffsets;
+
+    private String customOffsets; // ex: "2,1"
 
     public Tache(@NonNull String idTache,
                  @NonNull String projectId,
@@ -33,7 +39,11 @@ public class Tache {
                  Date deadline,
                  Date createdAt,
                  Date lastUpdated,
-                 Boolean isSynced) {
+                 Boolean isSynced,
+                 long estimatedMillis,
+                 boolean reminderEnabled,
+                 boolean useDefaultOffsets,
+                 String customOffsets) {
         this.idTache = idTache;
         this.projectId = projectId;
         this.title = title;
@@ -44,6 +54,10 @@ public class Tache {
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.isSynced = isSynced;
+        this.estimatedMillis = estimatedMillis;
+        this.reminderEnabled = reminderEnabled;
+        this.useDefaultOffsets = useDefaultOffsets;
+        this.customOffsets = customOffsets;
     }
 
     @NonNull
@@ -127,6 +141,38 @@ public class Tache {
 
     public void setSynced(Boolean synced) {
         isSynced = synced;
+    }
+
+    public long getEstimatedMillis() {
+        return estimatedMillis;
+    }
+
+    public void setEstimatedMillis(long estimatedMillis) {
+        this.estimatedMillis = estimatedMillis;
+    }
+
+    public boolean isReminderEnabled() {
+        return reminderEnabled;
+    }
+
+    public void setReminderEnabled(boolean reminderEnabled) {
+        this.reminderEnabled = reminderEnabled;
+    }
+
+    public boolean isUseDefaultOffsets() {
+        return useDefaultOffsets;
+    }
+
+    public void setUseDefaultOffsets(boolean useDefaultOffsets) {
+        this.useDefaultOffsets = useDefaultOffsets;
+    }
+
+    public String getCustomOffsets() {
+        return customOffsets;
+    }
+
+    public void setCustomOffsets(String customOffsets) {
+        this.customOffsets = customOffsets;
     }
 }
 

@@ -39,25 +39,42 @@ public class TacheRepository {
     }
 
     // -------------------------
-    // Queries métier
+    // READ
+    // -------------------------
+
+    public List<Tache> getAll() {
+        return tacheDao.getAll();
+    }
+
+    public Tache getById(String id) {
+        return tacheDao.getById(id);
+    }
+
+    // -------------------------
+    // Requêtes métier
     // -------------------------
 
     public List<Tache> getByProject(String projectId) {
         return tacheDao.getByProject(projectId);
     }
 
-    public List<Tache> getAll() {
-        return tacheDao.getAll();
-    }
-
-    public List<Tache> getByStatus(String status) {
-        return tacheDao.getByStatus(status);
-    }
     public List<Tache> getUnsynced() {
         return tacheDao.getUnsynced();
     }
 
     public void updateStatus(String id, String status, Date lastUpdated) {
         executor.execute(() -> tacheDao.updateStatus(id, status, lastUpdated));
+    }
+
+    public List<Tache> getByStatus(String status) {
+        return tacheDao.getByStatus(status);
+    }
+
+    public List<Tache> getByDeadline() {
+        return tacheDao.getByDeadline();
+    }
+
+    public List<Tache> getOverdue(Date now) {
+        return tacheDao.getOverdue(now);
     }
 }

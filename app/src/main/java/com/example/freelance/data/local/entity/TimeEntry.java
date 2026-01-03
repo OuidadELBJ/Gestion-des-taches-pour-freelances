@@ -12,29 +12,42 @@ public class TimeEntry {
     private String idTime;
     @NonNull
     private String taskId;
+    private String projectId; // accès direct au projet
     private Date startTime;
     private Date endTime;
     private long duration;
     private boolean isRunning;
     private Date lastUpdated;
     private boolean isSynced;
+    private boolean isPaused;
+    private long pausedAccumulated; // temps total en pause
+
+    private String note;
 
     public TimeEntry(@NonNull String idTime,
                      @NonNull String taskId,
+                     String projectId,
                      Date startTime,
                      Date endTime,
                      long duration,
                      boolean isRunning,
                      Date lastUpdated,
-                     boolean isSynced) {
+                     boolean isSynced,
+                     boolean isPaused,
+                     long pausedAccumulated,
+                     String note) {
         this.idTime = idTime;
         this.taskId = taskId;
+        this.projectId = projectId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = duration;
         this.isRunning = isRunning;
         this.lastUpdated = lastUpdated;
         this.isSynced = isSynced;
+        this.isPaused = isPaused;
+        this.pausedAccumulated = pausedAccumulated;
+        this.note = note;
     }
 
     @NonNull
@@ -101,6 +114,38 @@ public class TimeEntry {
 
     public void setSynced(boolean synced) {
         isSynced = synced;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public long getPausedAccumulated() {
+        return pausedAccumulated;
+    }
+
+    public void setPausedAccumulated(long pausedAccumulated) {
+        this.pausedAccumulated = pausedAccumulated;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
 

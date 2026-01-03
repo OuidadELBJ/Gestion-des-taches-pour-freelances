@@ -14,15 +14,32 @@ import com.example.freelance.data.local.entity.TimeEntry;
 @Dao
 public interface TimeEntryDao {
 
+    //-----------------CRUD-----------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TimeEntry timeEntry);
 
     @Update
     void update(TimeEntry timeEntry);
 
+    @Delete
+    void delete(TimeEntry timeEntry);
+
+    // --------- READ ---------
+    @Query("SELECT * FROM time_entries")
+    List<TimeEntry> getAll();
+
+    @Query("SELECT * FROM time_entries WHERE idTime = :id")
+    TimeEntry getById(String id);
+
+    // --------- METIER ---------
+
     // Tous les time entries d’une tâche
     @Query("SELECT * FROM time_entries WHERE taskId = :taskId")
     List<TimeEntry> getByTask(String taskId);
+
+    // Toutes les entrées d’un projet
+    @Query("SELECT * FROM time_entries WHERE projectId = :projectId")
+    List<TimeEntry> getByProject(String projectId);
 
     // Time entries en cours
     @Query("SELECT * FROM time_entries WHERE isRunning = 1 LIMIT 1")
@@ -32,10 +49,41 @@ public interface TimeEntryDao {
     @Query("SELECT * FROM time_entries WHERE isSynced = 0")
     List<TimeEntry> getUnsynced();
 
+    // Dernière entrée d’une tâche
+    @Query(
+            "SELECT * FROM time_entries " +
+                    "WHERE taskId = :taskId " +
+                    "ORDER BY startTime DESC " +
+                    "LIMIT 1"
+    )
+    TimeEntry getLastByTask(String taskId);
+
+    // --------- ACTIONS TIMER ---------
+
     // Arrêter un timer
     @Query("UPDATE time_entries SET isRunning = 0, endTime = :endTime, duration = :duration, lastUpdated = :lastUpdated WHERE idTime = :id")
     void stopTimer(String id, Date endTime, long duration, Date lastUpdated);
 
-    @Delete
-    void delete(TimeEntry timeEntry);
+    // Pause timer
+    @Query(
+            "UPDATE time_entries " +
+                    "SET isPaused = 1, " +
+                    "lastUpdated = :lastUpdated " +
+                    "WHERE idTime = :id"
+    )
+    void pauseTimer(String id, Date lastUpdated);
+
+    // Resume timer
+    @Query(
+            "UPDATE time_entries " +
+                    "SET isPaused = 0, " +
+                    "pausedAccumulated = :pausedAccumulated, " +
+                    "lastUpdated = :lastUpdated " +
+                    "WHERE idTime = :id"
+    )
+    void resumeTimer(
+            String id,
+            long pausedAccumulated,
+            Date lastUpdated
+    );
     }

@@ -39,17 +39,45 @@ public class PaiementRepository {
     }
 
     // -------------------------
-    // Queries métier
+    // READ
     // -------------------------
 
-    public List<Paiement> getByProjet(String projetId) {
-        return paiementDao.getByProject(projetId);
+    public List<Paiement> getAll() {
+        return paiementDao.getAll();
     }
 
-    public double getTotalByProjet(String projetId) {
-        Double total = paiementDao.getTotalByProject(projetId);
-        return total != null ? total : 0.0;
+    public Paiement getById(String id) {
+        return paiementDao.getById(id);
     }
+
+    // -------------------------
+    // Requêtes métier
+    // -------------------------
+
+    public List<Paiement> getByProject(String projectId) {
+        return paiementDao.getByProject(projectId);
+    }
+
+    public List<Paiement> getByPaidStatus(boolean paid) {
+        return paiementDao.getByPaidStatus(paid);
+    }
+
+    public List<Paiement> getOverdue(Date now) {
+        return paiementDao.getOverdue(now);
+    }
+
+    public List<Paiement> getUpcoming(Date now) {
+        return paiementDao.getUpcoming(now);
+    }
+
+    public Double getTotalPaidByProject(String projectId) {
+        return paiementDao.getTotalPaidByProject(projectId);
+    }
+
+    public double getTotalByProject(String projectId) {
+        return paiementDao.getTotalByProject(projectId);
+    }
+
     public List<Paiement> getUnsynced() {
         return paiementDao.getUnsynced();
     }
