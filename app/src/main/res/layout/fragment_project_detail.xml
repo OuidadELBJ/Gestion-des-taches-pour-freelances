@@ -38,7 +38,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="96dp"
+        android:paddingBottom="112dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -78,8 +78,8 @@
                             android:layout_weight="1"
                             android:text="Site web client A"
                             android:textStyle="bold"
-                            android:textSize="18sp"
-                            android:textColor="#1E1E1E"
+                            android:textSize="20sp"
+                            android:textColor="#121826"
                             android:maxLines="2"
                             android:ellipsize="end" />
 
@@ -89,13 +89,14 @@
                             android:layout_height="wrap_content"
                             android:text="En cours"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textSize="13sp"
                             app:chipCornerRadius="999dp"
                             app:chipBackgroundColor="?attr/colorPrimary"
-                            app:chipMinHeight="28dp"
+                            app:chipMinHeight="30dp"
                             app:ensureMinTouchTargetSize="false"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp" />
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp" />
                     </LinearLayout>
 
                     <!-- Ligne 2: Client + deadline -->
@@ -104,25 +105,89 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Client A"
-                        android:textColor="#6B7280"
-                        android:textSize="13sp"
-                        android:layout_marginTop="6dp" />
+                        android:textColor="#5B6477"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:id="@+id/textDeadlineHeader"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Deadline : 15/01/2026"
-                        android:textColor="#6B7280"
-                        android:textSize="13sp"
-                        android:layout_marginTop="2dp" />
+                        android:textColor="#5B6477"
+                        android:textSize="15sp"
+                        android:layout_marginTop="4dp" />
+
+                    <!-- Contact client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contacter le client"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#121826"
+                        android:layout_marginTop="14dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutContactClient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnContactSms"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:minHeight="52dp"
+                            android:text="SMS"
+                            android:textAllCaps="false"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            app:cornerRadius="14dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="?attr/colorPrimary"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnContactEmail"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:minHeight="52dp"
+                            android:text="Email"
+                            android:textAllCaps="false"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            app:cornerRadius="14dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="?attr/colorPrimary"
+                            android:textColor="?attr/colorPrimary" />
+                    </LinearLayout>
+
+                    <!-- Finances -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Finances"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#121826"
+                        android:layout_marginTop="16dp" />
 
                     <!-- Ligne 3: Prévu / Payé / Restant -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:weightSum="3">
 
                         <LinearLayout
@@ -135,8 +200,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Prévu"
-                                android:textSize="12sp"
-                                android:textColor="#6B7280" />
+                                android:textSize="13sp"
+                                android:textColor="#5B6477" />
 
                             <TextView
                                 android:id="@+id/textAmountPlanned"
@@ -144,8 +209,9 @@
                                 android:layout_height="wrap_content"
                                 android:text="1 500 €"
                                 android:textStyle="bold"
-                                android:textSize="14sp"
-                                android:textColor="#1E1E1E" />
+                                android:textSize="16sp"
+                                android:textColor="#121826"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -158,8 +224,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Payé"
-                                android:textSize="12sp"
-                                android:textColor="#6B7280" />
+                                android:textSize="13sp"
+                                android:textColor="#5B6477" />
 
                             <TextView
                                 android:id="@+id/textAmountPaid"
@@ -167,8 +233,9 @@
                                 android:layout_height="wrap_content"
                                 android:text="800 €"
                                 android:textStyle="bold"
-                                android:textSize="14sp"
-                                android:textColor="#1E1E1E" />
+                                android:textSize="16sp"
+                                android:textColor="#121826"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -181,8 +248,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Restant"
-                                android:textSize="12sp"
-                                android:textColor="#6B7280" />
+                                android:textSize="13sp"
+                                android:textColor="#5B6477" />
 
                             <TextView
                                 android:id="@+id/textAmountRemaining"
@@ -190,17 +257,18 @@
                                 android:layout_height="wrap_content"
                                 android:text="700 €"
                                 android:textStyle="bold"
-                                android:textSize="14sp"
-                                android:textColor="#1E1E1E" />
+                                android:textSize="16sp"
+                                android:textColor="#121826"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Ligne 4: Temps + taux -->
+                    <!-- Temps + taux -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="14dp">
 
                         <TextView
                             android:id="@+id/textTimeTotal"
@@ -208,31 +276,31 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Temps total : 12h30"
-                            android:textColor="#6B7280"
-                            android:textSize="13sp" />
+                            android:textColor="#5B6477"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/textHourlyRate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Taux horaire : 60 €/h"
-                            android:textColor="#6B7280"
-                            android:textSize="13sp" />
+                            android:textColor="#5B6477"
+                            android:textSize="15sp" />
                     </LinearLayout>
 
-                    <!-- Progress bar + % -->
+                    <!-- Progress -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="14dp">
 
                         <ProgressBar
                             android:id="@+id/progressGlobal"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
-                            android:layout_height="8dp"
+                            android:layout_height="10dp"
                             android:layout_weight="1"
                             android:max="100"
                             android:progress="40" />
@@ -242,9 +310,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="40%"
-                            android:textColor="#6B7280"
-                            android:textSize="12sp"
-                            android:layout_marginStart="10dp" />
+                            android:textColor="#5B6477"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="12dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -263,7 +332,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="10dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:backgroundTint="@android:color/white"
@@ -275,18 +344,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="56dp"
+                        android:minHeight="60dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ajouter tâche"
                             android:textStyle="bold"
-                            android:textSize="13sp"
-                            android:textColor="#1E1E1E"
+                            android:textSize="15sp"
+                            android:textColor="#121826"
                             android:maxLines="2"
                             android:ellipsize="end" />
                     </LinearLayout>
@@ -297,7 +366,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="10dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:backgroundTint="@android:color/white"
@@ -309,18 +378,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="56dp"
+                        android:minHeight="60dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Démarrer timer"
                             android:textStyle="bold"
-                            android:textSize="13sp"
-                            android:textColor="#1E1E1E"
+                            android:textSize="15sp"
+                            android:textColor="#121826"
                             android:maxLines="2"
                             android:ellipsize="end" />
                     </LinearLayout>
@@ -342,18 +411,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="56dp"
+                        android:minHeight="60dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ajouter paiement"
                             android:textStyle="bold"
-                            android:textSize="13sp"
-                            android:textColor="#1E1E1E"
+                            android:textSize="15sp"
+                            android:textColor="#121826"
                             android:maxLines="2"
                             android:ellipsize="end" />
                     </LinearLayout>
@@ -370,7 +439,8 @@
                 android:background="@android:color/transparent"
                 app:tabIndicatorColor="?attr/colorPrimary"
                 app:tabSelectedTextColor="?attr/colorPrimary"
-                app:tabTextColor="#6B7280" />
+                app:tabTextColor="#5B6477"
+                app:tabTextAppearance="@style/TextAppearance.Material3.TitleSmall" />
 
             <!-- CONTENU: TÂCHES -->
             <androidx.recyclerview.widget.RecyclerView
@@ -409,17 +479,17 @@
                             android:layout_height="wrap_content"
                             android:text="Résumé temps"
                             android:textStyle="bold"
-                            android:textSize="15sp"
-                            android:textColor="#1E1E1E" />
+                            android:textSize="16sp"
+                            android:textColor="#121826" />
 
                         <TextView
                             android:id="@+id/tvProjectTimeSummary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tâche: 00:00:00 • Projet: 00:00:00"
-                            android:textSize="13sp"
-                            android:textColor="#6B7280"
-                            android:layout_marginTop="6dp" />
+                            android:textSize="15sp"
+                            android:textColor="#5B6477"
+                            android:layout_marginTop="8dp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cardOpenTimerFromProject"
@@ -435,7 +505,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:minHeight="48dp"
+                                android:minHeight="52dp"
                                 android:gravity="center"
                                 android:orientation="horizontal"
                                 android:paddingStart="14dp"
@@ -446,7 +516,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ouvrir Timer"
                                     android:textStyle="bold"
-                                    android:textSize="14sp"
+                                    android:textSize="15sp"
                                     android:textColor="@android:color/white" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -455,8 +525,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Sessions de temps (TODO)"
-                            android:textSize="13sp"
-                            android:textColor="#6B7280"
+                            android:textSize="15sp"
+                            android:textColor="#5B6477"
                             android:layout_marginTop="12dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -491,26 +561,26 @@
                             android:layout_height="wrap_content"
                             android:text="Résumé paiements"
                             android:textStyle="bold"
-                            android:textSize="15sp"
-                            android:textColor="#1E1E1E" />
+                            android:textSize="16sp"
+                            android:textColor="#121826" />
 
                         <TextView
                             android:id="@+id/tvPaymentsExpected"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Attendu : 0 €"
-                            android:textSize="13sp"
-                            android:textColor="#6B7280"
-                            android:layout_marginTop="8dp" />
+                            android:textSize="15sp"
+                            android:textColor="#5B6477"
+                            android:layout_marginTop="10dp" />
 
                         <TextView
                             android:id="@+id/tvPaymentsReceived"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Reçu : 0 €"
-                            android:textSize="13sp"
-                            android:textColor="#6B7280"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="15sp"
+                            android:textColor="#5B6477"
+                            android:layout_marginTop="6dp" />
 
                         <TextView
                             android:id="@+id/tvPaymentsRemaining"
@@ -518,9 +588,9 @@
                             android:layout_height="wrap_content"
                             android:text="Restant : 0 €"
                             android:textStyle="bold"
-                            android:textSize="13sp"
-                            android:textColor="#1E1E1E"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="15sp"
+                            android:textColor="#121826"
+                            android:layout_marginTop="6dp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cardOpenPaymentsFromProject"
@@ -536,7 +606,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:minHeight="48dp"
+                                android:minHeight="52dp"
                                 android:gravity="center"
                                 android:orientation="horizontal"
                                 android:paddingStart="14dp"
@@ -547,7 +617,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ouvrir Paiements"
                                     android:textStyle="bold"
-                                    android:textSize="14sp"
+                                    android:textSize="15sp"
                                     android:textColor="@android:color/white" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -556,7 +626,7 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- CONTENU: NOTES (finalisé) -->
+            <!-- CONTENU: NOTES -->
             <LinearLayout
                 android:id="@+id/layoutNotesTab"
                 android:layout_width="match_parent"
@@ -585,23 +655,22 @@
                             android:layout_height="wrap_content"
                             android:text="Notes du projet"
                             android:textStyle="bold"
-                            android:textSize="15sp"
-                            android:textColor="#1E1E1E" />
+                            android:textSize="16sp"
+                            android:textColor="#121826" />
 
-                        <!-- Petit état vide (affiché par Java si besoin) -->
                         <TextView
                             android:id="@+id/tvNotesPlaceholder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Aucune note pour le moment."
-                            android:textColor="#6B7280"
-                            android:textSize="13sp"
-                            android:layout_marginTop="8dp" />
+                            android:textColor="#5B6477"
+                            android:textSize="15sp"
+                            android:layout_marginTop="10dp" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="12dp"
                             android:hint="Écrire une note…"
                             app:boxBackgroundMode="outline"
                             app:boxCornerRadiusTopStart="14dp"
@@ -614,11 +683,11 @@
                                 android:id="@+id/etProjectNotes"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:minLines="4"
+                                android:minLines="5"
                                 android:gravity="top|start"
                                 android:inputType="textMultiLine"
-                                android:textColor="#1E1E1E"
-                                android:textSize="14sp"
+                                android:textColor="#121826"
+                                android:textSize="15sp"
                                 android:paddingTop="12dp"
                                 android:paddingBottom="12dp" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -626,11 +695,12 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSaveNotes"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="52dp"
                             android:layout_marginTop="12dp"
-                            android:minHeight="48dp"
+                            android:minHeight="52dp"
                             android:text="Enregistrer"
                             android:textStyle="bold"
+                            android:textSize="15sp"
                             android:textColor="@android:color/white"
                             android:backgroundTint="?attr/colorPrimary"
                             app:cornerRadius="14dp" />
@@ -641,7 +711,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="24dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

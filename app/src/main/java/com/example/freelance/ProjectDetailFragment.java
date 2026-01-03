@@ -45,7 +45,7 @@ public class ProjectDetailFragment extends Fragment {
     // Notes
     private android.widget.EditText etProjectNotes;
     private com.google.android.material.button.MaterialButton btnSaveNotes;
-
+    private com.google.android.material.button.MaterialButton btnContactSms, btnContactEmail;
     // Header
     private TextView textProjectTitleHeader, textProjectClientHeader, textDeadlineHeader;
     private TextView textAmountPlanned, textAmountPaid, textAmountRemaining;
@@ -144,6 +144,37 @@ public class ProjectDetailFragment extends Fragment {
         etProjectNotes = view.findViewById(R.id.etProjectNotes);
         btnSaveNotes = view.findViewById(R.id.btnSaveNotes);
 
+
+        btnContactSms = view.findViewById(R.id.btnContactSms);
+        btnContactEmail = view.findViewById(R.id.btnContactEmail);
+        data.modele.Project p = data.fake.FakeProjectStore.get().getById(projectId);
+
+        String clientName = (p != null && p.clientName != null) ? p.clientName : "";
+        String phone = (p != null && p.clientPhone != null) ? p.clientPhone : "";
+        String email = (p != null && p.clientEmail != null) ? p.clientEmail : "";
+
+        String projectLabel = (projectName != null) ? projectName : "votre projet";
+
+        String msg = "Bonjour" + (clientName.isEmpty() ? "" : " " + clientName) + ",\n\n"
+                + "Je vous contacte concernant le projet \"" + projectLabel + "\".\n"
+                + "Merci.\n";
+
+        String subject = "Projet - " + projectLabel;
+
+// Désactiver si vide (évite crash + UX propre)
+        setEnabledContactButton(btnContactSms, !phone.isEmpty());
+        setEnabledContactButton(btnContactEmail, !email.isEmpty());
+
+        btnContactSms.setOnClickListener(v -> {
+            if (phone.isEmpty()) return;
+            ui.payments.PaymentContactHelper.openSms(requireContext(), phone, msg);
+        });
+
+        btnContactEmail.setOnClickListener(v -> {
+            if (email.isEmpty()) return;
+            ui.payments.PaymentContactHelper.openEmail(requireContext(), email, subject, msg);
+        });
+
         // ===== Bind fake data header/tabs (temp) =====
         bindFakeHeader();
         bindFakeTimeTab();
@@ -175,6 +206,12 @@ public class ProjectDetailFragment extends Fragment {
         // ✅ refresh liste tâches + notes quand on revient (AddTaskFragment etc.)
         loadTasksFromStore();
         loadNotes();
+    }
+
+    private void setEnabledContactButton(com.google.android.material.button.MaterialButton b, boolean enabled) {
+        if (b == null) return;
+        b.setEnabled(enabled);
+        b.setAlpha(enabled ? 1f : 0.45f);
     }
 
     // ---------- Menu toolbar ----------
