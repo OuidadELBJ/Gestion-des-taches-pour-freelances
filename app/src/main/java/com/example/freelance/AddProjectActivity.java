@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,63 +12,58 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Calendar;
 
 public class AddProjectActivity extends AppCompatActivity {
 
-    public static final String EXTRA_NAME     = "extra_name";
-    public static final String EXTRA_CLIENT   = "extra_client";
-    public static final String EXTRA_DEADLINE = "extra_deadline";
-    public static final String EXTRA_STATUS   = "extra_status";
-    public static final String EXTRA_BUDGET   = "extra_budget";
-    public static final String EXTRA_HOURLY   = "extra_hourly";
-    public static final String EXTRA_NOTES    = "extra_notes";
+    public static final String EXTRA_NAME         = "extra_name";
+    public static final String EXTRA_CLIENT       = "extra_client";
+    public static final String EXTRA_CLIENT_EMAIL = "extra_client_email";
+    public static final String EXTRA_CLIENT_PHONE = "extra_client_phone";
+    public static final String EXTRA_DEADLINE     = "extra_deadline";
+    public static final String EXTRA_STATUS       = "extra_status";
+    public static final String EXTRA_BUDGET       = "extra_budget";
+    public static final String EXTRA_HOURLY       = "extra_hourly";
+    public static final String EXTRA_NOTES        = "extra_notes";
 
-    private EditText editName;
-    private EditText editClient;
-    private EditText editDeadline;
-    private Spinner  spinnerStatus;
-    private EditText editBudget;
-    private EditText editHourly;
-    private EditText editNotes;
-    private Button   buttonCancel;
-    private Button   buttonCreate;
+    private EditText editName, editClientName, editClientEmail, editClientPhone;
+    private EditText editDeadline, editBudget, editHourlyRate, editNotes;
+    private Spinner spinnerStatus;
+    private Button buttonCancel, buttonCreate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
 
-        Toolbar toolbar = findViewById(R.id.toolbarAddProject);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Nouveau projet");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        MaterialToolbar toolbar = findViewById(R.id.toolbarAddProject);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        editName     = findViewById(R.id.editProjectName);
-        editClient   = findViewById(R.id.editClient);
+        editName = findViewById(R.id.editProjectName);
+        editClientName = findViewById(R.id.editClientName);
+        editClientEmail = findViewById(R.id.editClientEmail);
+        editClientPhone = findViewById(R.id.editClientPhone);
+
         editDeadline = findViewById(R.id.editDeadline);
-        spinnerStatus= findViewById(R.id.spinnerStatus);
-        editBudget   = findViewById(R.id.editBudget);
-        editHourly   = findViewById(R.id.editHourlyRate);
-        editNotes    = findViewById(R.id.editNotes);
+        spinnerStatus = findViewById(R.id.spinnerStatus);
+        editBudget = findViewById(R.id.editBudget);
+        editHourlyRate = findViewById(R.id.editHourlyRate);
+        editNotes = findViewById(R.id.editNotes);
+
         buttonCancel = findViewById(R.id.buttonCancelProject);
         buttonCreate = findViewById(R.id.buttonCreateProject);
 
-        // Statuts
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.project_status_array,   // on le crée en strings.xml juste après
+                R.array.project_status_array,
                 android.R.layout.simple_spinner_item
         );
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerStatus.setAdapter(statusAdapter);
 
-        // Date picker
         editDeadline.setOnClickListener(v -> showDatePicker());
 
         buttonCancel.setOnClickListener(v -> {
@@ -81,16 +75,15 @@ public class AddProjectActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        int year  = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day   = calendar.get(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance();
+        int year  = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day   = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
-                (view, year1, month1, dayOfMonth) -> {
-                    String date = String.format("%02d/%02d/%04d",
-                            dayOfMonth, month1 + 1, year1);
+                (view, y, m, d) -> {
+                    String date = String.format("%02d/%02d/%04d", d, m + 1, y);
                     editDeadline.setText(date);
                 },
                 year, month, day
@@ -99,33 +92,34 @@ public class AddProjectActivity extends AppCompatActivity {
     }
 
     private void validateAndReturn() {
-        String name     = editName.getText().toString().trim();
-        String client   = editClient.getText().toString().trim();
-        String deadline = editDeadline.getText().toString().trim();
-        String status   = spinnerStatus.getSelectedItem().toString();
-        String budgetStr= editBudget.getText().toString().trim();
-        String hourlyStr= editHourly.getText().toString().trim();
-        String notes    = editNotes.getText().toString().trim();
+        String name = safeText(editName);
+        String clientName = safeText(editClientName);
+        String clientEmail = safeText(editClientEmail);
+        String clientPhone = safeText(editClientPhone);
+        String deadline = safeText(editDeadline);
+        String status = spinnerStatus.getSelectedItem() != null ? spinnerStatus.getSelectedItem().toString() : "En cours";
+        String budgetStr = safeText(editBudget);
+        String hourlyStr = safeText(editHourlyRate);
+        String notes = safeText(editNotes);
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(client) || TextUtils.isEmpty(deadline)) {
-            Toast.makeText(this,
-                    "Nom, client et deadline sont obligatoires",
-                    Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(clientName) || TextUtils.isEmpty(deadline)) {
+            Toast.makeText(this, "Nom, client et deadline sont obligatoires", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        double budget = 0;
-        double hourly = 0;
-        try {
-            if (!budgetStr.isEmpty()) budget = Double.parseDouble(budgetStr);
-        } catch (NumberFormatException ignored) {}
-        try {
-            if (!hourlyStr.isEmpty()) hourly = Double.parseDouble(hourlyStr);
-        } catch (NumberFormatException ignored) {}
+        if (!TextUtils.isEmpty(clientEmail) && !android.util.Patterns.EMAIL_ADDRESS.matcher(clientEmail).matches()) {
+            Toast.makeText(this, "Email client invalide", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double budget = parseDouble(budgetStr, 0.0);
+        double hourly = parseDouble(hourlyStr, 0.0);
 
         Intent data = new Intent();
         data.putExtra(EXTRA_NAME, name);
-        data.putExtra(EXTRA_CLIENT, client);
+        data.putExtra(EXTRA_CLIENT, clientName);
+        data.putExtra(EXTRA_CLIENT_EMAIL, clientEmail);
+        data.putExtra(EXTRA_CLIENT_PHONE, clientPhone);
         data.putExtra(EXTRA_DEADLINE, deadline);
         data.putExtra(EXTRA_STATUS, status);
         data.putExtra(EXTRA_BUDGET, budget);
@@ -134,5 +128,14 @@ public class AddProjectActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    private String safeText(EditText et) {
+        return (et.getText() == null) ? "" : et.getText().toString().trim();
+    }
+
+    private double parseDouble(String s, double def) {
+        try { return Double.parseDouble(s); }
+        catch (Exception e) { return def; }
     }
 }

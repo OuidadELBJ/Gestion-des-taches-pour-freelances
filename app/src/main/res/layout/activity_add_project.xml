@@ -6,17 +6,16 @@
     android:layout_height="match_parent"
     android:background="#F4F6FB">
 
-    <!-- AppBar bleu -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAddProject"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#2F5BFF"
         app:navigationIcon="@android:drawable/ic_media_previous"
+        app:navigationIconTint="@android:color/white"
         app:title="Nouveau projet"
         app:titleTextColor="@android:color/white" />
 
-    <!-- Contenu scrollable -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +28,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Carte formulaire -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +77,52 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Nom du client"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Email client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Email client (optionnel)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editClientEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="client@mail.com"
+                        android:inputType="textEmailAddress"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Téléphone client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Téléphone client (optionnel)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editClientPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="+33612345678"
+                        android:inputType="phone"
                         android:background="@android:color/transparent"
                         android:textColor="#1F2A44"
                         android:textColorHint="#9AA6C8"
@@ -200,15 +244,12 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- espace scroll -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="90dp" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- BOUTONS BAS -->
     <LinearLayout
         android:id="@+id/layoutButtonsBottom"
         android:layout_width="match_parent"
