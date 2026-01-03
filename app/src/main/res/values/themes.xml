@@ -1,9 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Freelance" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.Freelance" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Couleurs Material -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+
+        <item name="colorPrimaryContainer">@color/color_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/color_on_primary_container</item>
+
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+
+        <!-- Fond général de l’app -->
+        <!-- IMPORTANT : on utilise *android:colorBackground* et PAS colorBackground -->
+        <item name="android:colorBackground">@color/color_background</item>
+
+        <!-- Barre de status / nav bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/navBackground</item>
+
     </style>
 
-    <style name="Theme.Freelance" parent="Base.Theme.Freelance" />
 </resources>

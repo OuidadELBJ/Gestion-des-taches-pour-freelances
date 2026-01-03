@@ -2,7 +2,182 @@
     <string name="app_name">Freelance</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_project">Ajouter un projet</string>
-    <string name="add_task">Ajouter une tâche</string>
+    <!-- ================= NAVIGATION GLOBALE ================= -->
+
+
+    <string-array name="project_status_array">
+        <item>En cours</item>
+        <item>En retard</item>
+        <item>Terminé</item>
+    </string-array>
+
+    <string name="project_details">Détails du projet</string>
+
+    <string name="title_add_project">Nouveau projet</string>
+    <string name="label_project_name">Nom du projet</string>
+    <string name="label_client">Client</string>
+    <string name="label_deadline">Deadline</string>
+    <string name="label_budget">Budget prévu</string>
+    <string name="label_hourly_rate">Taux horaire (optionnel)</string>
+    <string name="label_notes">Notes</string>
+
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_projects">Projets</string>
+    <string name="nav_timer">Timer</string>
+    <string name="nav_payments">Paiements</string>
+
+    <!-- ================= LISTE DES PROJETS ================= -->
+    <string name="projects_title">Projets</string>
+    <string name="projects_subtitle">Vos projets en cours</string>
+    <string name="projects_search_hint">Rechercher un client / projet…</string>
+
+    <!-- Filtres / chips -->
+    <string name="projects_filter_all">Tous</string>
+    <string name="projects_filter_in_progress">En cours</string>
+    <string name="projects_filter_overdue">En retard</string>
+    <string name="projects_filter_done">Terminés</string>
+    <string name="projects_filter_billing">Facturation</string>
+
+    <!-- Badges statut -->
+    <string name="projects_badge_in_progress">En cours</string>
+    <string name="projects_badge_overdue">En retard</string>
+    <string name="projects_badge_done">Terminé</string>
+    <string name="projects_badge_archived">Archivé</string>
+
+    <!-- Lignes d’info sur la carte projet -->
+    <string name="projects_item_deadline">Deadline : %1$s</string>
+    <string name="projects_item_budget">Budget : %1$s</string>
+    <string name="projects_item_time_tracked">Temps suivi : %1$s</string>
+    <string name="projects_item_progress">%1$d%%</string>
+    <string name="projects_item_tasks">Tâches : %1$d/%2$d</string>
+    <string name="projects_item_last_activity">Dernière activité : %1$s</string>
+
+    <!-- États vides + FAB -->
+    <string name="projects_empty_title">Aucun projet pour l’instant</string>
+    <string name="projects_empty_subtitle">Créez votre premier projet pour commencer à suivre votre travail.</string>
+    <string name="projects_fab_new_project">Nouveau projet</string>
+
+    <!-- ================= DÉTAIL PROJET ================= -->
+    <string name="project_detail_menu_edit">Modifier le projet</string>
+    <string name="project_detail_menu_archive">Archiver</string>
+    <string name="project_detail_menu_delete">Supprimer</string>
+
+    <string name="project_detail_status_label">Statut</string>
+    <string name="project_detail_deadline_label">Deadline</string>
+
+    <!-- Résumé financier -->
+    <string name="project_detail_amount_planned">Prévu</string>
+    <string name="project_detail_amount_paid">Payé</string>
+    <string name="project_detail_amount_remaining">Restant</string>
+
+    <!-- Temps -->
+    <string name="project_detail_time_tracked">Temps suivi</string>
+    <string name="project_detail_hourly_rate">Taux horaire</string>
+
+    <!-- Progression -->
+    <string name="project_detail_progress">%1$d%%</string>
+
+    <!-- Tabs / sections -->
+    <string name="project_detail_tab_tasks">Tâches</string>
+    <string name="project_detail_tab_time">Temps</string>
+    <string name="project_detail_tab_payments">Paiements</string>
+    <string name="project_detail_tab_notes">Notes</string>
+
+    <!-- Tâches -->
+    <string name="project_detail_tasks_sort_by_deadline">Par deadline</string>
+    <string name="project_detail_tasks_sort_by_priority">Par priorité</string>
+    <string name="task_status_todo">À faire</string>
+    <string name="task_status_in_progress">En cours</string>
+    <string name="task_status_done">Fait</string>
+    <string name="project_detail_add_task">+ Ajouter une tâche</string>
+
+    <!-- Temps (onglet Temps du projet) -->
+    <string name="project_detail_time_today">Aujourd’hui : %1$s</string>
+    <string name="project_detail_time_week">Cette semaine : %1$s</string>
+    <string name="project_detail_time_total">Total : %1$s</string>
+    <string name="project_detail_start_timer">Démarrer le timer</string>
+
+    <!-- Paiements (onglet Paiements) -->
+    <string name="project_detail_payments_title">Paiements</string>
+    <string name="payment_status_paid">Payé</string>
+    <string name="payment_status_pending">En attente</string>
+    <string name="project_detail_create_invoice">Créer une facture</string>
+
+    <!-- ================= NOUVEAU PROJET ================= -->
+    <string name="project_new_title">Nouveau projet</string>
+
+    <string name="project_new_name_label">Nom du projet</string>
+    <string name="project_new_name_hint">Ex. Site vitrine client A</string>
+
+    <string name="project_new_client_label">Client</string>
+    <string name="project_new_client_hint">Nom du client</string>
+
+    <string name="project_new_deadline_label">Deadline</string>
+
+    <string name="project_new_budget_label">Budget prévu</string>
+    <string name="project_new_budget_hint">Ex. 1 500 €</string>
+
+    <string name="project_new_rate_label">Taux horaire (optionnel)</string>
+    <string name="project_new_rate_hint">Ex. 60 €/h</string>
+
+    <string name="project_new_notes_label">Notes</string>
+    <string name="project_new_notes_hint">Ajoutez des détails sur le projet…</string>
+
+    <string name="project_new_reminders_label">Activer les rappels</string>
+    <string name="project_new_reminders_frequency">Fréquence des rappels</string>
+
+    <string name="project_new_primary_cta">Créer le projet</string>
+    <string name="project_new_secondary_cta">Annuler</string>
+
+    <!-- ================= DIVERS / BADGES ================= -->
+    <string name="badge_priority">Priorité</string>
+    <string name="badge_overdue">En retard</string>
+    <string name="badge_done">Terminé</string>
+
+
+        <!-- Écran Projets - AppBar / Recherche -->
+        <string name="title_projects">Projets</string>
+        <string name="subtitle_projects">Vos projets en cours</string>
+
+        <!-- Champ de recherche -->
+        <string name="search_hint">Rechercher un client / projet…</string>
+        <!-- ContentDescription de l’icône filtre -->
+        <string name="filter_hint">Ouvrir les filtres des projets</string>
+
+        <!-- Chips de filtres -->
+        <string name="filter_all">Tous</string>
+        <string name="filter_in_progress">En cours</string>
+        <string name="filter_late">En retard</string>
+        <string name="filter_done">Terminés</string>
+        <string name="filter_billing">Facturation</string>
+
+        <!-- Badges statut projet -->
+        <string name="status_in_progress">En cours</string>
+        <string name="status_late">En retard</string>
+        <string name="status_done">Terminé</string>
+
+        <!-- FAB / actions projets -->
+        <string name="new_project">Nouveau projet</string>
+        <string name="add_project">Ajouter un projet</string>
+        <string name="add_task">Ajouter une tâche</string>
+
+        <!-- Détail projet – onglets -->
+        <string name="tab_tasks">Tâches</string>
+        <string name="tab_time">Temps</string>
+        <string name="tab_payments">Paiements</string>
+        <string name="tab_notes">Notes</string>
+
+        <!-- Formulaire Nouveau projet -->
+        <string name="screen_new_project">Nouveau projet</string>
+        <string name="field_project_name">Nom du projet</string>
+        <string name="field_client">Client</string>
+        <string name="field_deadline">Deadline</string>
+        <string name="field_budget">Budget prévu</string>
+        <string name="field_hourly_rate">Taux horaire (optionnel)</string>
+        <string name="field_notes">Notes</string>
+        <string name="label_enable_reminders">Activer les rappels</string>
+        <string name="action_create_project">Créer le projet</string>
+        <string name="action_cancel">Annuler</string>
+
 
 </resources>

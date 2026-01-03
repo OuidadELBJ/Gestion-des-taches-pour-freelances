@@ -1,0 +1,5 @@
+<resources>
+    <!-- Utilisé par certains styles Material / navigation -->
+    <attr name="navigationBarColor" format="color" />
+    <attr name="materialNavigationBarStyle" format="reference" />
+</resources>

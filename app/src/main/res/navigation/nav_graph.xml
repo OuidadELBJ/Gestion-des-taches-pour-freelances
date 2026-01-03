@@ -5,55 +5,144 @@
     app:startDestination="@id/dashboardFragment">
 
     <!-- Dashboard -->
-<fragment
-android:id="@+id/dashboardFragment"
-android:name="com.example.freelance.DashboardFragment"
-android:label="Dashboard" />
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.freelance.DashboardFragment"
+        android:label="Dashboard">
+
+        <!-- ✅ Actions manquantes -->
+        <action
+            android:id="@+id/action_dashboardFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_projectListFragment"
+            app:destination="@id/projectListFragment" />
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_paymentsFragment"
+            app:destination="@id/paymentsFragment" />
+    </fragment>
+
+    <!-- Profil -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.freelance.ProfileFragment"
+        android:label="Profil" />
 
     <!-- Liste des projets -->
-<fragment
-android:id="@+id/projectListFragment"
-android:name="com.example.freelance.ProjectListFragment"
-android:label="Projets">
+    <fragment
+        android:id="@+id/projectListFragment"
+        android:name="com.example.freelance.ProjectListFragment"
+        android:label="Projets">
 
-<action
-    android:id="@+id/action_projectListFragment_to_projectDetailFragment"
-    app:destination="@id/projectDetailFragment" />
-</fragment>
+        <action
+            android:id="@+id/action_projectListFragment_to_projectDetailFragment"
+            app:destination="@id/projectDetailFragment" />
 
-    <!-- Timer -->
-<fragment
-android:id="@+id/timerFragment"
-android:name="com.example.freelance.TimerFragment"
-android:label="Timer" />
+        <action
+            android:id="@+id/action_projectListFragment_to_addProjectFragment"
+            app:destination="@id/addProjectFragment" />
+    </fragment>
 
-    <!-- Paiements -->
-<fragment
-android:id="@+id/paymentsFragment"
-android:name="com.example.freelance.PaymentsFragment"
-android:label="Paiements" />
+    <fragment
+        android:id="@+id/addTaskFragment"
+        android:name="com.example.freelance.AddTaskFragment"
+        android:label="Ajouter tâche">
+
+        <argument
+            android:name="projectId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="projectName"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.example.freelance.TaskDetailFragment"
+        android:label="Détail tâche">
+        <argument android:name="taskId" app:argType="string" />
+        <argument android:name="projectId" app:argType="string" />
+    </fragment>
 
     <!-- Détails projet -->
-<fragment
-android:id="@+id/projectDetailFragment"
-android:name="com.example.freelance.ProjectDetailFragment"
-android:label="Détails projet">
+    <fragment
+        android:id="@+id/projectDetailFragment"
+        android:name="com.example.freelance.ProjectDetailFragment"
+        android:label="Détails projet">
 
-<argument
-    android:name="projectId"
-    app:argType="string" />
+        <argument
+            android:name="projectId"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
-<argument
-    android:name="projectName"
-    app:argType="string" />
+    <!-- Ajouter projet -->
+    <fragment
+        android:id="@+id/addProjectFragment"
+        android:name="com.example.freelance.AddProjectFragment"
+        android:label="Ajouter projet" />
 
-<argument
-    android:name="projectClient"
-    app:argType="string" />
 
-<argument
-    android:name="projectDeadlineText"
-    app:argType="string" />
-</fragment>
 
-    </navigation>
+    <!-- Timer (si tu l’utilises en fragment, sinon enlève-le) -->
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.freelance.TimerFragment"
+        android:label="Timer">
+
+        <argument
+            android:name="projectId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="taskId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="projectName"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentsFragment"
+        android:name="com.example.freelance.PaymentsFragment"
+        android:label="Paiements">
+
+        <argument
+            android:name="projectId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="projectName"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <action
+            android:id="@+id/action_paymentsFragment_to_addPaymentFragment"
+            app:destination="@id/addPaymentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addPaymentFragment"
+        android:name="com.example.freelance.AddPaymentFragment"
+        android:label="Ajouter paiement">
+
+        <argument
+            android:name="projectId"
+            app:argType="string" />
+
+        <argument
+            android:name="projectName"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+</navigation>

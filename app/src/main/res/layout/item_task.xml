@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="2dp">
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="@color/cardBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,30 +16,97 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/textTaskTitle"
-            android:layout_width="wrap_content"
+        <!-- Ligne 1 : titre + statut + checkbox -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titre tâche"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/textTaskDeadline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Deadline : 10/01/2026"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
+            <TextView
+                android:id="@+id/textTaskTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Créer la maquette"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/textPrimary" />
 
-        <TextView
-            android:id="@+id/textTaskStatus"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textTaskStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="En cours"
+                android:textSize="11sp"
+                android:textColor="@color/textSecondary" />
+
+            <CheckBox
+                android:id="@+id/checkTaskDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/color_primary" />
+        </LinearLayout>
+
+        <!-- Ligne 2 : deadline + priorité -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Statut : À faire"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textTaskDeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deadline : 05/01/2026"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+
+            <TextView
+                android:id="@+id/textPriorityBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:text="Priorité"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="#FFF3E0"
+            android:textColor="#F57C00" />
+        </LinearLayout>
+
+        <!-- Ligne 3 : petite description / icône optionnelle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iconTask"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_task_bullet"
+                android:tint="@color/color_primary"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/textTaskExtra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Détail ou projet associé"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+        </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

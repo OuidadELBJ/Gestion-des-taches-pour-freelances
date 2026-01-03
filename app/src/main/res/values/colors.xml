@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="freelance_primary_blue">#1D4ED8</color>          <!-- bleu principal -->
-    <color name="freelance_primary_blue_light">#E0ECFF</color>    <!-- fond bleu clair -->
-    <color name="freelance_accent_orange">#F97316</color>         <!-- accent orange -->
-    <color name="freelance_background">#F9F5FF</color>            <!-- fond général -->
-    <color name="freelance_card">#F3E8FF</color>                  <!-- fond des cards -->
-    <color name="freelance_text_title">#111827</color>            <!-- texte titre -->
-    <color name="freelance_text_secondary">#4B5563</color>        <!-- texte secondaire -->
-    <color name="appBackground">#F8F5FF</color>      <!-- fond général -->
-    <color name="cardBackground">#EFE7FF</color>     <!-- cards dashboard/projets -->
-    <color name="primaryBlue">#2563EB</color>       <!-- accent principal -->
-    <color name="primaryOrange">#F97316</color>     <!-- chiffres importants -->
-    <color name="textPrimary">#1F2937</color>
-    <color name="textSecondary">#6B7280</color>
+
+    <!-- Palette principale BLEU + ORANGE (tu peux ajuster les codes hex si tu veux) -->
+    <color name="color_primary">#1854E6</color>            <!-- bleu principal -->
+    <color name="color_on_primary">#FFFFFFFF</color>       <!-- texte sur le bleu -->
+
+    <color name="color_primary_container">#E3EBFF</color>  <!-- bleu très clair (cards, badges) -->
+    <color name="color_on_primary_container">#102347</color>
+
+    <color name="color_secondary">#FF9800</color>          <!-- orange accent -->
+    <color name="color_on_secondary">#FFFFFFFF</color>
+    <color name="color_warning_orange">#FFA24A</color>
+    <color name="color_done_green">#2ECC71</color>
+
+    <!-- Surfaces / fonds -->
+    <color name="color_background">#F5F7FF</color>         <!-- fond global de l’app -->
+    <color name="color_surface">#FFFFFFFF</color>          <!-- cartes / feuilles blanches -->
+    <color name="color_on_surface">#1F2430</color>         <!-- texte principal sur surface -->
+    <!-- Alias utilisés dans tes layouts -->
+    <color name="appBackground">@color/color_background</color>
+    <color name="cardBackground">@color/color_primary_container</color>
+
+    <color name="textPrimary">@color/color_on_surface</color>
+    <color name="textSecondary">#7A8194</color>
+
+    <!-- Accent orange qu’on utilisait sur le Dashboard -->
+    <color name="primaryOrange">@color/color_secondary</color>
 
     <!-- Bottom navigation -->
-    <color name="navBackground">#F3F4F6</color>
-    <color name="navActive">#2563EB</color>
-    <color name="navInactive">#9CA3AF</color>
+    <color name="navBackground">#EEF0FF</color>
+
+    <color name="bottom_nav_icon_selected">@color/color_primary</color>
+    <color name="bottom_nav_icon_unselected">#9AA1B8</color>
+
+    <color name="bottom_nav_text_selected">@color/color_primary</color>
+    <color name="bottom_nav_text_unselected">#9AA1B8</color>
+
 </resources>
