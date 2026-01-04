@@ -42,6 +42,8 @@ android {
 dependencies {
 
     implementation(libs.appcompat)
+    // Authentification Firebase
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
