@@ -14,18 +14,28 @@ import com.example.freelance.data.local.entity.Tache;
 @Dao
 public interface TacheDao {
 
+    //--------------CRUD------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Tache tache);
 
     @Update
     void update(Tache tache);
 
+    @Delete
+    void delete(Tache tache);
+
+    // --------- READ ---------
+    @Query("SELECT * FROM taches")
+    List<Tache> getAll();
+
+    @Query("SELECT * FROM taches WHERE idTache = :id")
+    Tache getById(String id);
+
+    // --------- METIER ---------
+
     // Toutes les tâches d’un projet
     @Query("SELECT * FROM taches WHERE projectId = :projectId")
     List<Tache> getByProject(String projectId);
-
-    @Query("SELECT * FROM taches")
-    List<Tache> getAll();
 
     // Tâches non synchronisées
     @Query("SELECT * FROM taches WHERE isSynced = 0")
@@ -38,6 +48,13 @@ public interface TacheDao {
     @Query("SELECT * FROM taches WHERE status = :status")
     List<Tache> getByStatus(String status);
 
-    @Delete
-    void delete(Tache tache);
+    // Tâches avec deadline (tri)
+    @Query("SELECT * FROM taches WHERE deadline IS NOT NULL ORDER BY deadline ASC")
+    List<Tache> getByDeadline();
+
+    // Tâches en retard
+    @Query("SELECT * FROM taches WHERE deadline < :now AND status != 'DONE'")
+    List<Tache> getOverdue(Date now);
+
+
 }

@@ -19,6 +19,12 @@ public class Paiement {
     private Date lastUpdated;
     private boolean isSynced;
 
+    private Date dueDate;      // date d’échéance
+    private boolean paid;      // payé ou non
+    private String clientEmail;
+    private String clientPhone;
+    private String invoiceRef;
+
     public Paiement(@NonNull String idPaiement,
                     @NonNull String projectId,
                     double amount,
@@ -26,7 +32,12 @@ public class Paiement {
                     String method,
                     String note,
                     Date lastUpdated,
-                    boolean isSynced) {
+                    boolean isSynced,
+                    Date dueDate,
+                    boolean paid,
+                    String clientEmail,
+                    String clientPhone,
+                    String invoiceRef) {
         this.idPaiement = idPaiement;
         this.projectId = projectId;
         this.amount = amount;
@@ -35,6 +46,11 @@ public class Paiement {
         this.note = note;
         this.lastUpdated = lastUpdated;
         this.isSynced = isSynced;
+        this.dueDate = dueDate;
+        this.paid = paid;
+        this.clientEmail = clientEmail;
+        this.clientPhone = clientPhone;
+        this.invoiceRef = invoiceRef;
     }
 
     @NonNull
@@ -101,6 +117,46 @@ public class Paiement {
 
     public void setSynced(boolean synced) {
         isSynced = synced;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public String getClientEmail() {
+        return clientEmail;
+    }
+
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
+    }
+
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = clientPhone;
+    }
+
+    public String getInvoiceRef() {
+        return invoiceRef;
+    }
+
+    public void setInvoiceRef(String invoiceRef) {
+        this.invoiceRef = invoiceRef;
     }
 }
 

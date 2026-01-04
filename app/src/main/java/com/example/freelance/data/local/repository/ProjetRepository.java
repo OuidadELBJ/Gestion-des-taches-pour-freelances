@@ -39,13 +39,21 @@ public class ProjetRepository {
         executor.execute(() -> projetDao.delete(projet));
     }
 
-    public List<Projet> getAll() {
-        return projetDao.getAll();
-    }
+    // -------------------------
+    // READ
+    // -------------------------
 
     public Projet getById(String id) {
         return projetDao.getById(id);
     }
+
+    public List<Projet> getAll() {
+        return projetDao.getAll();
+    }
+
+    // -------------------------
+    // Requêtes métier
+    // -------------------------
 
     public List<Projet> getUnsynced() {
         return projetDao.getUnsynced();
@@ -61,5 +69,13 @@ public class ProjetRepository {
 
     public void updateHourlyRate(String id, double rate, Date lastUpdated) {
         executor.execute(() -> projetDao.updateHourlyRate(id, rate, lastUpdated));
+    }
+
+    public List<Projet> getByDeadline() {
+        return projetDao.getByDeadline();
+    }
+
+    public List<Projet> getOverdue(Date now) {
+        return projetDao.getOverdue(now);
     }
 }
