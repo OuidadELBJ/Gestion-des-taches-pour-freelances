@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "263870340592",
+    "project_id": "freelanceapp2",
+    "storage_bucket": "freelanceapp2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263870340592:android:ecb296aa20fa38b8695135",
+        "android_client_info": {
+          "package_name": "com.example.freelance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIg1qV4XkifuLoNxV8V6D8EkvNSME4Qxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
