@@ -47,7 +47,6 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         cbAtNine = findViewById(R.id.cbAtNine);
 
         Button btnSave = findViewById(R.id.btnSaveReminders);
-        Button btnTest = findViewById(R.id.btnTestNotification);
 
         ReminderPrefs p = ReminderPrefs.load(this);
         applyToUi(p);
@@ -59,10 +58,7 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
             android.widget.Toast.makeText(this, "Rappels enregistrés ✅", android.widget.Toast.LENGTH_SHORT).show();
         });
 
-        btnTest.setOnClickListener(v -> {
-            ReminderScheduler.scheduleTestInSeconds(this, 15);
-            android.widget.Toast.makeText(this, "Test dans 15s ✅", android.widget.Toast.LENGTH_SHORT).show();
-        });
+
     }
 
     private void applyToUi(ReminderPrefs p) {
