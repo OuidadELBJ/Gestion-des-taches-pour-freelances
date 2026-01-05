@@ -176,7 +176,7 @@ public class ProjectDetailFragment extends Fragment {
         });
 
         // ===== Bind fake data header/tabs (temp) =====
-        bindFakeHeader();
+        bindProjectHeaderFromStore();
         bindFakeTimeTab();
         bindFakePaymentsTab();
 
@@ -231,21 +231,43 @@ public class ProjectDetailFragment extends Fragment {
     }
 
     // ---------- Header fake ----------
-    private void bindFakeHeader() {
-        textProjectTitleHeader.setText(projectName);
-        textProjectClientHeader.setText("Client A");
-        textStatusBadgeHeader.setText("En cours");
-        textDeadlineHeader.setText("Deadline : 15/01/2026");
 
-        textAmountPlanned.setText("1 500 €");
-        textAmountPaid.setText("800 €");
-        textAmountRemaining.setText("700 €");
 
-        textTimeTotal.setText("Temps total : 12h30");
-        textHourlyRate.setText("Taux horaire : 60 €/h");
+    private void bindProjectHeaderFromStore() {
+        data.modele.Project p = data.fake.FakeProjectStore.get().getById(projectId);
 
-        progressGlobal.setProgress(40);
-        textProgressGlobal.setText("40%");
+        // Fallback si store ne trouve pas le projet (ex: projet ajouté depuis UI mais pas ajouté au store)
+        String title = !TextUtils.isEmpty(projectName) ? projectName : "Détail projet";
+        String client = "";
+        String deadlineTxt = "Deadline : -";
+        String status = "En cours";
+
+        if (p != null) {
+            title = safe(p.name);
+            client = safe(p.clientName);
+            status = safe(p.status);
+
+            if (p.deadlineMillis > 0) {
+                String d = (String) android.text.format.DateFormat.format("dd/MM/yyyy", p.deadlineMillis);
+                deadlineTxt = "Deadline : " + d;
+            }
+        }
+
+        textProjectTitleHeader.setText(title);
+        textProjectClientHeader.setText(client.isEmpty() ? "-" : client);
+        textDeadlineHeader.setText(deadlineTxt);
+        textStatusBadgeHeader.setText(status);
+
+        // Paiements / temps / progress → tu peux les brancher plus tard avec tes stores
+        textAmountPlanned.setText("0 €");
+        textAmountPaid.setText("0 €");
+        textAmountRemaining.setText("0 €");
+
+        textTimeTotal.setText("Temps total : 0h");
+        textHourlyRate.setText("Taux horaire : -");
+
+        progressGlobal.setProgress(0);
+        textProgressGlobal.setText("0%");
     }
 
     private void bindFakeTimeTab() {

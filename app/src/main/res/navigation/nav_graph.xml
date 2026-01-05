@@ -40,9 +40,6 @@
             android:id="@+id/action_projectListFragment_to_projectDetailFragment"
             app:destination="@id/projectDetailFragment" />
 
-        <action
-            android:id="@+id/action_projectListFragment_to_addProjectFragment"
-            app:destination="@id/addProjectFragment" />
     </fragment>
 
     <fragment
@@ -82,10 +79,7 @@
     </fragment>
 
     <!-- Ajouter projet -->
-    <fragment
-        android:id="@+id/addProjectFragment"
-        android:name="com.example.freelance.AddProjectFragment"
-        android:label="Ajouter projet" />
+
 
 
 
@@ -125,24 +119,7 @@
             app:argType="string"
             android:defaultValue="" />
 
-        <action
-            android:id="@+id/action_paymentsFragment_to_addPaymentFragment"
-            app:destination="@id/addPaymentFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/addPaymentFragment"
-        android:name="com.example.freelance.AddPaymentFragment"
-        android:label="Ajouter paiement">
-
-        <argument
-            android:name="projectId"
-            app:argType="string" />
-
-        <argument
-            android:name="projectName"
-            app:argType="string"
-            android:defaultValue="" />
-    </fragment>
 
 </navigation>
