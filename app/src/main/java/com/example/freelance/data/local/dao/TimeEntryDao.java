@@ -7,14 +7,15 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
+
 import com.example.freelance.data.local.entity.TimeEntry;
 
 @Dao
 public interface TimeEntryDao {
 
-    //-----------------CRUD-----------
+    // ----------------- CRUD -----------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TimeEntry timeEntry);
 
@@ -24,24 +25,32 @@ public interface TimeEntryDao {
     @Delete
     void delete(TimeEntry timeEntry);
 
-    // --------- READ ---------
+    // ----------------- READ -----------------
     @Query("SELECT * FROM time_entries")
     List<TimeEntry> getAll();
 
     @Query("SELECT * FROM time_entries WHERE idTime = :id")
     TimeEntry getById(String id);
 
-    // --------- METIER ---------
+    // ----------------- METIER -----------------
 
-    // Tous les time entries d’une tâche
-    @Query("SELECT * FROM time_entries WHERE taskId = :taskId")
+    // ✅ Tous les time entries d’une tâche (triés du + récent au + ancien)
+    @Query("SELECT * FROM time_entries WHERE taskId = :taskId ORDER BY startTime DESC")
     List<TimeEntry> getByTask(String taskId);
 
-    // Toutes les entrées d’un projet
-    @Query("SELECT * FROM time_entries WHERE projectId = :projectId")
+    // ✅ Toutes les entrées d’un projet (triées)
+    @Query("SELECT * FROM time_entries WHERE projectId = :projectId ORDER BY startTime DESC")
     List<TimeEntry> getByProject(String projectId);
 
-    // Time entries en cours
+    // ✅ Total durée d’une tâche
+    @Query("SELECT COALESCE(SUM(duration), 0) FROM time_entries WHERE taskId = :taskId")
+    long getTotalTask(String taskId);
+
+    // ✅ Total durée d’un projet
+    @Query("SELECT COALESCE(SUM(duration), 0) FROM time_entries WHERE projectId = :projectId")
+    long getTotalProject(String projectId);
+
+    // Time entry en cours
     @Query("SELECT * FROM time_entries WHERE isRunning = 1 LIMIT 1")
     List<TimeEntry> getRunning();
 
@@ -58,7 +67,7 @@ public interface TimeEntryDao {
     )
     TimeEntry getLastByTask(String taskId);
 
-    // --------- ACTIONS TIMER ---------
+    // ----------------- ACTIONS TIMER -----------------
 
     // Arrêter un timer
     @Query("UPDATE time_entries SET isRunning = 0, endTime = :endTime, duration = :duration, lastUpdated = :lastUpdated WHERE idTime = :id")
@@ -81,9 +90,5 @@ public interface TimeEntryDao {
                     "lastUpdated = :lastUpdated " +
                     "WHERE idTime = :id"
     )
-    void resumeTimer(
-            String id,
-            long pausedAccumulated,
-            Date lastUpdated
-    );
-    }
+    void resumeTimer(String id, long pausedAccumulated, Date lastUpdated);
+}

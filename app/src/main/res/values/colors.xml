@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Palette principale BLEU + ORANGE (tu peux ajuster les codes hex si tu veux) -->
-    <color name="color_primary">#1854E6</color>            <!-- bleu principal -->
     <color name="color_on_primary">#FFFFFFFF</color>       <!-- texte sur le bleu -->
 
     <color name="color_primary_container">#E3EBFF</color>  <!-- bleu très clair (cards, badges) -->
@@ -23,17 +22,28 @@
 
     <color name="textPrimary">@color/color_on_surface</color>
     <color name="textSecondary">#7A8194</color>
+    <color name="color_primary">#32007C</color>
 
-    <!-- Accent orange qu’on utilisait sur le Dashboard -->
-    <color name="primaryOrange">@color/color_secondary</color>
+    <!-- Assure-toi que les autres couleurs utilisées par ton thème sont aussi là -->
+    <color name="black">#FF000000</color>
 
     <!-- Bottom navigation -->
     <color name="navBackground">#EEF0FF</color>
 
-    <color name="bottom_nav_icon_selected">@color/color_primary</color>
+    <color name="bottom_nav_icon_selected">@color/colorPrimary</color>
     <color name="bottom_nav_icon_unselected">#9AA1B8</color>
 
-    <color name="bottom_nav_text_selected">@color/color_primary</color>
+    <color name="bottom_nav_text_selected">@color/colorPrimary</color>
     <color name="bottom_nav_text_unselected">#9AA1B8</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#2196F3</color>
+    <color name="backgroundGray">#F5F5F5</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="textDark">#000000</color>
+    <color name="textGray">#757575</color>
+    <color name="textHint">#555555</color>
+    <color name="buttonDisabled">#B0B0B0</color>
 
 </resources>

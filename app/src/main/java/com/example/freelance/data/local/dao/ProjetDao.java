@@ -9,6 +9,7 @@ import androidx.room.Query;
 
 import java.util.List;
 import java.util.Date;
+
 import com.example.freelance.data.local.entity.Projet;
 
 @Dao
@@ -25,15 +26,13 @@ public interface ProjetDao {
     void delete(Projet projet);
 
     // --------- READ ---------
-
     @Query("SELECT * FROM projets WHERE idProjet = :id")
     Projet getById(String id);
 
-    @Query("SELECT * FROM projets")
+    @Query("SELECT * FROM projets ORDER BY deadline ASC")
     List<Projet> getAll();
 
     // --------- FILTRES METIER ---------
-
     @Query("SELECT * FROM projets WHERE isSynced = 0")
     List<Projet> getUnsynced();
 
@@ -46,13 +45,13 @@ public interface ProjetDao {
     @Query("UPDATE projets SET hourlyRate = :rate, lastUpdated = :lastUpdated WHERE idProjet = :id")
     void updateHourlyRate(String id, double rate, Date lastUpdated);
 
-    // Projets avec deadline proche
     @Query("SELECT * FROM projets WHERE deadline IS NOT NULL ORDER BY deadline ASC")
     List<Projet> getByDeadline();
 
-    // Projets en retard
     @Query("SELECT * FROM projets WHERE deadline < :now AND status != 'DONE'")
     List<Projet> getOverdue(Date now);
 
-
+    // ✅ NOTES PROJET (Option B)
+    @Query("UPDATE projets SET description = :description, lastUpdated = :lastUpdated WHERE idProjet = :id")
+    void updateDescription(String id, String description, Date lastUpdated);
 }

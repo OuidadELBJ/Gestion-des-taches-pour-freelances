@@ -1,80 +1,66 @@
 package com.example.freelance.data.local.repository;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.freelance.data.local.AppDatabase;
 import com.example.freelance.data.local.dao.TacheDao;
 import com.example.freelance.data.local.entity.Tache;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class TacheRepository {
 
-    private final TacheDao tacheDao;
-    private final Executor executor;
+    public interface Callback<T> { void onResult(T value); }
+
+    private final TacheDao dao;
+    private final Executor io = Executors.newSingleThreadExecutor();
+    private final Handler main = new Handler(Looper.getMainLooper());
 
     public TacheRepository(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
-        this.tacheDao = database.tacheDao();
-        this.executor = Executors.newSingleThreadExecutor();
+        dao = AppDatabase.getInstance(context.getApplicationContext()).tacheDao();
     }
 
-    // -------------------------
-    // CRUD
-    // -------------------------
-
-    public void insert(Tache tache) {
-        executor.execute(() -> tacheDao.insert(tache));
+    // ✅ Insert simple
+    public void insert(Tache t) {
+        io.execute(() -> dao.insert(t));
     }
 
-    public void update(Tache tache) {
-        executor.execute(() -> tacheDao.update(tache));
+    // ✅ Insert + callback (très utile pour revenir après écriture DB)
+    public void insert(Tache t, Runnable onDone) {
+        io.execute(() -> {
+            dao.insert(t);
+            if (onDone != null) main.post(onDone);
+        });
     }
 
-    public void delete(Tache tache) {
-        executor.execute(() -> tacheDao.delete(tache));
+    public void update(Tache t) {
+        io.execute(() -> dao.update(t));
     }
 
-    // -------------------------
-    // READ
-    // -------------------------
-
-    public List<Tache> getAll() {
-        return tacheDao.getAll();
+    public void delete(Tache t) {
+        io.execute(() -> dao.delete(t));
     }
 
-    public Tache getById(String id) {
-        return tacheDao.getById(id);
+    public void getByProject(String projectId, Callback<List<Tache>> cb) {
+        io.execute(() -> {
+            List<Tache> res = dao.getByProject(projectId);
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    // -------------------------
-    // Requêtes métier
-    // -------------------------
-
-    public List<Tache> getByProject(String projectId) {
-        return tacheDao.getByProject(projectId);
+    public void getAll(Callback<List<Tache>> cb) {
+        io.execute(() -> {
+            List<Tache> res = dao.getAll();
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    public List<Tache> getUnsynced() {
-        return tacheDao.getUnsynced();
-    }
-
-    public void updateStatus(String id, String status, Date lastUpdated) {
-        executor.execute(() -> tacheDao.updateStatus(id, status, lastUpdated));
-    }
-
-    public List<Tache> getByStatus(String status) {
-        return tacheDao.getByStatus(status);
-    }
-
-    public List<Tache> getByDeadline() {
-        return tacheDao.getByDeadline();
-    }
-
-    public List<Tache> getOverdue(Date now) {
-        return tacheDao.getOverdue(now);
+    // ⚠️ sync => seulement thread IO
+    public Tache getByIdSync(String id) {
+        return dao.getById(id);
     }
 }

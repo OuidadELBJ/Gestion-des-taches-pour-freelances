@@ -1,7 +1,5 @@
 package com.example.freelance;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,31 +19,35 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.entity.Tache;
+import com.example.freelance.data.local.repository.ProjetRepository;
+import com.example.freelance.data.local.repository.TacheRepository;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import data.fake.FakeTaskStore;
-import data.modele.Task;
+import java.util.Locale;
 
 public class ProjectDetailFragment extends Fragment {
 
     public static final String ARG_PROJECT_ID = "projectId";
     public static final String ARG_PROJECT_NAME = "projectName";
 
-    private static final String PREFS_NOTES = "project_notes_prefs";
-    private static final String KEY_NOTES_PREFIX = "notes_";
-
     private String projectId = "";
     private String projectName = "Détail projet";
 
-    // Notes
+    private TacheRepository tacheRepo;
+    private ProjetRepository projetRepo;
+
+    // Notes (Room)
     private android.widget.EditText etProjectNotes;
     private com.google.android.material.button.MaterialButton btnSaveNotes;
     private com.google.android.material.button.MaterialButton btnContactSms, btnContactEmail;
+
     // Header
     private TextView textProjectTitleHeader, textProjectClientHeader, textDeadlineHeader;
     private TextView textAmountPlanned, textAmountPaid, textAmountRemaining;
@@ -75,6 +77,9 @@ public class ProjectDetailFragment extends Fragment {
     private TaskAdapter taskAdapter;
     private final List<TaskUiModel> tasksUi = new ArrayList<>();
 
+    // cache projet Room
+    private Projet currentProjet = null;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,6 +92,9 @@ public class ProjectDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tacheRepo = new TacheRepository(requireContext());
+        projetRepo = new ProjetRepository(requireContext());
 
         Bundle args = getArguments();
         if (args != null) {
@@ -144,41 +152,8 @@ public class ProjectDetailFragment extends Fragment {
         etProjectNotes = view.findViewById(R.id.etProjectNotes);
         btnSaveNotes = view.findViewById(R.id.btnSaveNotes);
 
-
         btnContactSms = view.findViewById(R.id.btnContactSms);
         btnContactEmail = view.findViewById(R.id.btnContactEmail);
-        data.modele.Project p = data.fake.FakeProjectStore.get().getById(projectId);
-
-        String clientName = (p != null && p.clientName != null) ? p.clientName : "";
-        String phone = (p != null && p.clientPhone != null) ? p.clientPhone : "";
-        String email = (p != null && p.clientEmail != null) ? p.clientEmail : "";
-
-        String projectLabel = (projectName != null) ? projectName : "votre projet";
-
-        String msg = "Bonjour" + (clientName.isEmpty() ? "" : " " + clientName) + ",\n\n"
-                + "Je vous contacte concernant le projet \"" + projectLabel + "\".\n"
-                + "Merci.\n";
-
-        String subject = "Projet - " + projectLabel;
-
-// Désactiver si vide (évite crash + UX propre)
-        setEnabledContactButton(btnContactSms, !phone.isEmpty());
-        setEnabledContactButton(btnContactEmail, !email.isEmpty());
-
-        btnContactSms.setOnClickListener(v -> {
-            if (phone.isEmpty()) return;
-            ui.payments.PaymentContactHelper.openSms(requireContext(), phone, msg);
-        });
-
-        btnContactEmail.setOnClickListener(v -> {
-            if (email.isEmpty()) return;
-            ui.payments.PaymentContactHelper.openEmail(requireContext(), email, subject, msg);
-        });
-
-        // ===== Bind fake data header/tabs (temp) =====
-        bindProjectHeaderFromStore();
-        bindFakeTimeTab();
-        bindFakePaymentsTab();
 
         setupTabs();
         setupTasksRecycler();
@@ -192,29 +167,23 @@ public class ProjectDetailFragment extends Fragment {
 
         cardActionAddTask.setOnClickListener(this::openAddTask);
 
-        // ===== Notes =====
-        loadNotes(); // pré-remplit l’EditText
+        // ===== Save notes (Room) =====
         btnSaveNotes.setOnClickListener(v -> {
-            saveNotes();
+            saveNotesToRoom();
             Toast.makeText(getContext(), "Notes enregistrées ✅", Toast.LENGTH_SHORT).show();
         });
+
+        // charge projet + notes + header + contact
+        loadProjectFromRoom();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // ✅ refresh liste tâches + notes quand on revient (AddTaskFragment etc.)
-        loadTasksFromStore();
-        loadNotes();
+        loadTasksFromRoom();
+        loadProjectFromRoom(); // refresh notes + header + contact
     }
 
-    private void setEnabledContactButton(com.google.android.material.button.MaterialButton b, boolean enabled) {
-        if (b == null) return;
-        b.setEnabled(enabled);
-        b.setAlpha(enabled ? 1f : 0.45f);
-    }
-
-    // ---------- Menu toolbar ----------
     private boolean onToolbarMenuItemClicked(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_project) {
@@ -230,44 +199,101 @@ public class ProjectDetailFragment extends Fragment {
         return false;
     }
 
-    // ---------- Header fake ----------
+    // ✅ charge projet depuis Room (header + notes + contacts)
+    private void loadProjectFromRoom() {
+        if (TextUtils.isEmpty(projectId)) return;
 
+        projetRepo.getById(projectId, p -> {
+            currentProjet = p;
 
-    private void bindProjectHeaderFromStore() {
-        data.modele.Project p = data.fake.FakeProjectStore.get().getById(projectId);
+            // fallback si projet pas en DB
+            if (p == null) {
+                textProjectTitleHeader.setText(projectName);
+                textProjectClientHeader.setText("-");
+                textDeadlineHeader.setText("Deadline : -");
+                textStatusBadgeHeader.setText("En cours");
 
-        // Fallback si store ne trouve pas le projet (ex: projet ajouté depuis UI mais pas ajouté au store)
-        String title = !TextUtils.isEmpty(projectName) ? projectName : "Détail projet";
-        String client = "";
-        String deadlineTxt = "Deadline : -";
-        String status = "En cours";
+                etProjectNotes.setText("");
+                tvNotesPlaceholder.setVisibility(View.VISIBLE);
 
-        if (p != null) {
-            title = safe(p.name);
-            client = safe(p.clientName);
-            status = safe(p.status);
-
-            if (p.deadlineMillis > 0) {
-                String d = (String) android.text.format.DateFormat.format("dd/MM/yyyy", p.deadlineMillis);
-                deadlineTxt = "Deadline : " + d;
+                setEnabledContactButton(btnContactSms, false);
+                setEnabledContactButton(btnContactEmail, false);
+                return;
             }
+
+            // HEADER
+            String title = safe(p.getName());
+            String client = safe(p.getClientName());
+            String status = safe(p.getStatus());
+
+            String deadlineTxt = "Deadline : -";
+            if (p.getDeadline() != null) {
+                deadlineTxt = "Deadline : " + android.text.format.DateFormat.format("dd/MM/yyyy", p.getDeadline());
+            }
+
+            textProjectTitleHeader.setText(title.isEmpty() ? projectName : title);
+            textProjectClientHeader.setText(client.isEmpty() ? "-" : client);
+            textDeadlineHeader.setText(deadlineTxt);
+            textStatusBadgeHeader.setText(status.isEmpty() ? "En cours" : status);
+
+            // (tu brancheras plus tard paiements/temps)
+            textAmountPlanned.setText("0 €");
+            textAmountPaid.setText("0 €");
+            textAmountRemaining.setText("0 €");
+            textTimeTotal.setText("Temps total : 0h");
+            textHourlyRate.setText("Taux horaire : -");
+            progressGlobal.setProgress(0);
+            textProgressGlobal.setText("0%");
+
+            // NOTES
+            String notes = safe(p.getDescription());
+            etProjectNotes.setText(notes);
+            tvNotesPlaceholder.setVisibility(TextUtils.isEmpty(notes.trim()) ? View.VISIBLE : View.GONE);
+
+            // CONTACT
+            String phone = safe(p.getClientPhone());
+            String email = safe(p.getClientEmail());
+
+            String projectLabel = !TextUtils.isEmpty(title) ? title : projectName;
+            String msg = "Bonjour" + (client.isEmpty() ? "" : " " + client) + ",\n\n"
+                    + "Je vous contacte concernant le projet \"" + projectLabel + "\".\n"
+                    + "Merci.\n";
+            String subject = "Projet - " + projectLabel;
+
+            setEnabledContactButton(btnContactSms, !phone.isEmpty());
+            setEnabledContactButton(btnContactEmail, !email.isEmpty());
+
+            btnContactSms.setOnClickListener(v -> {
+                if (phone.isEmpty()) return;
+                ui.payments.PaymentContactHelper.openSms(requireContext(), phone, msg);
+            });
+
+            btnContactEmail.setOnClickListener(v -> {
+                if (email.isEmpty()) return;
+                ui.payments.PaymentContactHelper.openEmail(requireContext(), email, subject, msg);
+            });
+
+            // Fake tabs
+            bindFakeTimeTab();
+            bindFakePaymentsTab();
+        });
+    }
+
+    private void saveNotesToRoom() {
+        if (TextUtils.isEmpty(projectId)) return;
+        String txt = (etProjectNotes.getText() == null) ? "" : etProjectNotes.getText().toString();
+
+        projetRepo.updateDescription(projectId, txt, new Date());
+
+        if (tvNotesPlaceholder != null) {
+            tvNotesPlaceholder.setVisibility(TextUtils.isEmpty(txt.trim()) ? View.VISIBLE : View.GONE);
         }
+    }
 
-        textProjectTitleHeader.setText(title);
-        textProjectClientHeader.setText(client.isEmpty() ? "-" : client);
-        textDeadlineHeader.setText(deadlineTxt);
-        textStatusBadgeHeader.setText(status);
-
-        // Paiements / temps / progress → tu peux les brancher plus tard avec tes stores
-        textAmountPlanned.setText("0 €");
-        textAmountPaid.setText("0 €");
-        textAmountRemaining.setText("0 €");
-
-        textTimeTotal.setText("Temps total : 0h");
-        textHourlyRate.setText("Taux horaire : -");
-
-        progressGlobal.setProgress(0);
-        textProgressGlobal.setText("0%");
+    private void setEnabledContactButton(com.google.android.material.button.MaterialButton b, boolean enabled) {
+        if (b == null) return;
+        b.setEnabled(enabled);
+        b.setAlpha(enabled ? 1f : 0.45f);
     }
 
     private void bindFakeTimeTab() {
@@ -309,11 +335,10 @@ public class ProjectDetailFragment extends Fragment {
         recyclerTasks.setLayoutManager(new LinearLayoutManager(getContext()));
         taskAdapter = new TaskAdapter(tasksUi);
         recyclerTasks.setAdapter(taskAdapter);
-
-        loadTasksFromStore();
+        loadTasksFromRoom();
     }
 
-    private void loadTasksFromStore() {
+    private void loadTasksFromRoom() {
         tasksUi.clear();
 
         if (TextUtils.isEmpty(projectId)) {
@@ -321,60 +346,39 @@ public class ProjectDetailFragment extends Fragment {
             return;
         }
 
-        List<Task> tasks = FakeTaskStore.get().listByProject(projectId);
-        for (Task t : tasks) {
-            tasksUi.add(new TaskUiModel(
-                    safe(t.title),
-                    (t.deadlineMillis > 0
-                            ? "Deadline : " + android.text.format.DateFormat.format("dd/MM/yyyy", t.deadlineMillis)
-                            : "Pas de deadline"),
-                    false,
-                    "À faire",
-                    false
-            ));
-        }
+        tacheRepo.getByProject(projectId, entities -> {
+            tasksUi.clear();
 
-        if (taskAdapter != null) taskAdapter.notifyDataSetChanged();
+            if (entities != null) {
+                for (Tache e : entities) {
+                    String title = safe(e.getTitle());
+
+                    String deadlineText = (e.getDeadline() != null)
+                            ? "Deadline : " + android.text.format.DateFormat.format("dd/MM/yyyy", e.getDeadline())
+                            : "Pas de deadline";
+
+                    String status = safe(e.getStatus());
+                    if (status.isEmpty()) status = "À faire";
+
+                    boolean done = status.toLowerCase(Locale.FRANCE).contains("done")
+                            || status.toLowerCase(Locale.FRANCE).contains("fait");
+
+                    boolean highPriority = false;
+                    String prio = e.getPriority();
+                    if (prio != null) {
+                        String p = prio.toLowerCase(Locale.FRANCE);
+                        highPriority = p.contains("high") || p.contains("haute") || p.contains("urgent");
+                    }
+
+                    tasksUi.add(new TaskUiModel(title, deadlineText, highPriority, status, done));
+                }
+            }
+
+            if (taskAdapter != null) taskAdapter.notifyDataSetChanged();
+        });
     }
 
-    private String safe(String s) {
-        return (s == null) ? "" : s;
-    }
-
-    // ---------- Notes (SharedPreferences) ----------
-    private void loadNotes() {
-        if (etProjectNotes == null || tvNotesPlaceholder == null) return;
-
-        String txt = "";
-        if (!TextUtils.isEmpty(projectId)) {
-            SharedPreferences sp = requireContext().getSharedPreferences(PREFS_NOTES, Context.MODE_PRIVATE);
-            txt = sp.getString(KEY_NOTES_PREFIX + projectId, "");
-        }
-
-        etProjectNotes.setText(txt);
-
-        // état vide
-        boolean empty = TextUtils.isEmpty(txt.trim());
-        tvNotesPlaceholder.setVisibility(empty ? View.VISIBLE : View.GONE);
-    }
-
-    private void saveNotes() {
-        if (etProjectNotes == null) return;
-
-        if (TextUtils.isEmpty(projectId)) {
-            Toast.makeText(getContext(), "Projet invalide (projectId vide)", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String txt = etProjectNotes.getText() == null ? "" : etProjectNotes.getText().toString();
-
-        SharedPreferences sp = requireContext().getSharedPreferences(PREFS_NOTES, Context.MODE_PRIVATE);
-        sp.edit().putString(KEY_NOTES_PREFIX + projectId, txt).apply();
-
-        if (tvNotesPlaceholder != null) {
-            tvNotesPlaceholder.setVisibility(TextUtils.isEmpty(txt.trim()) ? View.VISIBLE : View.GONE);
-        }
-    }
+    private String safe(String s) { return (s == null) ? "" : s; }
 
     // ---------- Navigation ----------
     private void openTimerFragment(View clickedView) {
@@ -439,7 +443,6 @@ public class ProjectDetailFragment extends Fragment {
             holder.checkDone.setChecked(t.done);
             holder.textPriority.setVisibility(t.highPriority ? View.VISIBLE : View.GONE);
 
-            // Task detail à brancher ensuite (TaskDetailFragment)
             holder.itemView.setOnClickListener(v ->
                     Toast.makeText(v.getContext(), "Détail tâche (TODO)", Toast.LENGTH_SHORT).show()
             );

@@ -1,39 +1,119 @@
 package ui.payments;
 
+import android.content.Context;
+
+import com.example.freelance.data.local.repository.PaiementRepository;
+import com.example.freelance.data.mapper.PaymentMapper;
+import com.example.freelance.data.local.entity.Paiement;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import data.fake.FakePaymentStore;
 import data.fake.FakeProjectStore;
 import data.modele.Payment;
 import data.modele.Project;
 
 public class PaymentsViewModel {
 
-    public List<Payment> list(String projectId) {
-        return FakePaymentStore.get().listByProject(projectId);
+    public interface Callback<T> { void onResult(T value); }
+
+    public static class UiState {
+        public List<Payment> list = new ArrayList<>();
+        public double received = 0;
+        public double expected = 0;
+        public double remaining = 0;
+        public int progressPercent = 0;
+        public boolean filtered = false;
     }
 
-    public List<Payment> listByMonth(String projectId, int month0to11, int year) {
-        return FakePaymentStore.get().listByProjectAndMonth(projectId, month0to11, year);
+    private final PaiementRepository repo;
+
+    public PaymentsViewModel(Context context) {
+        repo = new PaiementRepository(context.getApplicationContext());
     }
 
-    public double totalReceived(String projectId) {
-        return FakePaymentStore.get().totalPaidByProject(projectId);
-    }
+    // ✅ charge LIST + TOTAL (reçu) en 1 méthode
+    public void loadPayments(String projectId, Integer month0to11, Integer year, Callback<UiState> cb) {
+        UiState state = new UiState();
 
-    public double totalReceivedByMonth(String projectId, int month0to11, int year) {
-        return FakePaymentStore.get().totalPaidByProjectAndMonth(projectId, month0to11, year);
-    }
-
-    // ✅ attendu (budget) selon le mode du projet
-    public double expectedAmount(String projectId) {
+        // attendu (pour l’instant tu gardes FakeProjectStore)
         Project p = FakeProjectStore.get().getById(projectId);
-        if (p == null) return 0;
-        return p.expectedAmount();
+        state.expected = (p != null) ? p.expectedAmount() : 0;
+
+        if (month0to11 != null && year != null) {
+            state.filtered = true;
+
+            Date start = monthStart(year, month0to11);
+            Date end = monthEnd(year, month0to11);
+
+            repo.getByProjectBetween(projectId, start, end, entities -> {
+                state.list = mapList(entities);
+
+                repo.getTotalPaidByProjectBetween(projectId, start, end, total -> {
+                    state.received = safe(total);
+                    state.remaining = remaining(state.expected, state.received);
+                    state.progressPercent = progressPercent(state.expected, state.received);
+                    cb.onResult(state);
+                });
+            });
+
+        } else {
+            state.filtered = false;
+
+            repo.getByProject(projectId, entities -> {
+                state.list = mapList(entities);
+
+                repo.getTotalPaidByProject(projectId, total -> {
+                    state.received = safe(total);
+                    state.remaining = remaining(state.expected, state.received);
+                    state.progressPercent = progressPercent(state.expected, state.received);
+                    cb.onResult(state);
+                });
+            });
+        }
+    }
+
+    private List<Payment> mapList(List<Paiement> entities) {
+        List<Payment> out = new ArrayList<>();
+        if (entities == null) return out;
+        for (Paiement e : entities) {
+            Payment m = PaymentMapper.toModel(e);
+            if (m != null) out.add(m);
+        }
+        return out;
+    }
+
+    private double safe(Double d) {
+        return (d == null) ? 0.0 : d;
+    }
+
+    private Date monthStart(int year, int month0to11) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month0to11);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
+    }
+
+    private Date monthEnd(int year, int month0to11) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month0to11);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        c.set(Calendar.MILLISECOND, 999);
+        return c.getTime();
     }
 
     public double remaining(double expected, double received) {
@@ -72,4 +152,25 @@ public class PaymentsViewModel {
         return "Bonjour, petit rappel : la facture de " + money(p.amount) +
                 " arrive à échéance le " + d + ". Merci 🙂";
     }
+
+    public void debugInsertTestPayment(String projectId) {
+        if (projectId == null) return;
+
+        long now = System.currentTimeMillis();
+        long due = now + 2 * 24L * 60L * 60L * 1000L;
+
+        Payment test = new Payment(
+                "test_" + now,
+                projectId,
+                123.45,
+                now,
+                due,
+                false,
+                "TEST ROOM"
+        );
+
+        Paiement entity = PaymentMapper.toEntity(test);
+        repo.insert(entity);
+    }
+
 }

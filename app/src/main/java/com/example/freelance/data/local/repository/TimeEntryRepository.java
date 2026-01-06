@@ -1,6 +1,8 @@
 package com.example.freelance.data.local.repository;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.freelance.data.local.AppDatabase;
 import com.example.freelance.data.local.dao.TimeEntryDao;
@@ -13,76 +15,54 @@ import java.util.concurrent.Executors;
 
 public class TimeEntryRepository {
 
-    private final TimeEntryDao timeEntryDao;
-    private final Executor executor;
+    public interface Callback<T> { void onResult(T value); }
+
+    private final TimeEntryDao dao;
+    private final Executor io = Executors.newSingleThreadExecutor();
+    private final Handler main = new Handler(Looper.getMainLooper());
 
     public TimeEntryRepository(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
-        this.timeEntryDao = database.timeEntryDao();
-        this.executor = Executors.newSingleThreadExecutor();
+        AppDatabase db = AppDatabase.getInstance(context.getApplicationContext());
+        this.dao = db.timeEntryDao();
     }
 
-    // -------------------------
     // CRUD
-    // -------------------------
+    public void insert(TimeEntry entry) { io.execute(() -> dao.insert(entry)); }
+    public void update(TimeEntry entry) { io.execute(() -> dao.update(entry)); }
+    public void delete(TimeEntry entry) { io.execute(() -> dao.delete(entry)); }
 
-    public void insert(TimeEntry entry) {
-        executor.execute(() -> timeEntryDao.insert(entry));
+    // READ async
+    public void getByTask(String taskId, Callback<List<TimeEntry>> cb) {
+        io.execute(() -> {
+            List<TimeEntry> res = dao.getByTask(taskId);
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    public void update(TimeEntry entry) {
-        executor.execute(() -> timeEntryDao.update(entry));
+    public void getTotalTask(String taskId, Callback<Long> cb) {
+        io.execute(() -> {
+            long res = dao.getTotalTask(taskId);
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    public void delete(TimeEntry entry) {
-        executor.execute(() -> timeEntryDao.delete(entry));
+    public void getTotalProject(String projectId, Callback<Long> cb) {
+        io.execute(() -> {
+            long res = dao.getTotalProject(projectId);
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    //---------------------------
-    //READ
-    //--------------------------
-
-    public List<TimeEntry> getAll() {
-        return timeEntryDao.getAll();
-    }
-
-    public TimeEntry getById(String id) {
-        return timeEntryDao.getById(id);
-    }
-
-    // -------------------------
-    // Queries métier
-    // -------------------------
-
-    public List<TimeEntry> getByTask(String taskId) {
-        return timeEntryDao.getByTask(taskId);
-    }
-
-    public TimeEntry getRunningTimeEntry() {
-        List<TimeEntry> running = timeEntryDao.getRunning();
-        return running.isEmpty() ? null : running.get(0);
-    }
-    public List<TimeEntry> getUnsynced() {
-        return timeEntryDao.getUnsynced();
-    }
-
-    public TimeEntry getLastByTask(String taskId) {
-        return timeEntryDao.getLastByTask(taskId);
-    }
-
-    //-----------------------
-    //Actions Timer
-    //-----------------------
-
+    // (tes actions timer restent si tu veux)
     public void stopTimer(String id, Date endTime, long duration, Date lastUpdated) {
-        executor.execute(() -> timeEntryDao.stopTimer(id, endTime, duration, lastUpdated));
+        io.execute(() -> dao.stopTimer(id, endTime, duration, lastUpdated));
     }
 
     public void pauseTimer(String id, Date lastUpdated) {
-        executor.execute(() -> timeEntryDao.pauseTimer(id, lastUpdated));
+        io.execute(() -> dao.pauseTimer(id, lastUpdated));
     }
 
     public void resumeTimer(String id, long pausedAccumulated, Date lastUpdated) {
-        executor.execute(() -> timeEntryDao.resumeTimer(id, pausedAccumulated, lastUpdated));
+        io.execute(() -> dao.resumeTimer(id, pausedAccumulated, lastUpdated));
     }
 }

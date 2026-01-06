@@ -29,11 +29,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.entity.Tache;
+import com.example.freelance.data.local.repository.ProjetRepository;
+import com.example.freelance.data.local.repository.TacheRepository;
+import com.example.freelance.data.mapper.ProjetMapper;
+import com.example.freelance.data.mapper.TacheMapper;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import data.fake.FakeProjectStore;
-import data.fake.FakeTaskStore;
 import data.modele.Project;
 import data.modele.Task;
 import service.NotificationChannels;
@@ -65,6 +71,13 @@ public class TimerFragment extends Fragment {
     private Button btnStart, btnPause, btnStop;
 
     private ActivityResultLauncher<String> notifPermissionLauncher;
+
+    // ✅ Room
+    private ProjetRepository projetRepo;
+    private TacheRepository tacheRepo;
+
+    private final List<Project> projectsCache = new ArrayList<>();
+    private List<Task> tasksCache = new ArrayList<>();
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override public void onReceive(Context context, Intent intent) {
@@ -114,7 +127,13 @@ public class TimerFragment extends Fragment {
         }
 
         NotificationChannels.ensure(requireContext());
-        vm = new TimerViewModel();
+
+        // ✅ VM (déjà Room/async pour sessions dans ton code)
+        vm = new TimerViewModel(requireContext());
+
+        // ✅ Room repos
+        projetRepo = new ProjetRepository(requireContext());
+        tacheRepo = new TacheRepository(requireContext());
 
         ImageButton back = view.findViewById(R.id.buttonBackTimer);
         if (argProjectId != null) {
@@ -165,89 +184,118 @@ public class TimerFragment extends Fragment {
     }
 
     private void setupProjects() {
-        List<Project> projects = FakeProjectStore.get().list();
-        ArrayAdapter<Project> ad = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                projects
-        );
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerProjects.setAdapter(ad);
+        projetRepo.getAll(projets -> {
+            projectsCache.clear();
 
-        spinnerProjects.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                Project p = (Project) parent.getItemAtPosition(position);
-                selectedProjectId = p.id;
-                setupTasksForProject(selectedProjectId);
-            }
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
-        });
-
-        // ✅ préselection si on arrive depuis ProjectDetail
-        if (!projects.isEmpty()) {
-            int index = 0;
-            if (argProjectId != null) {
-                for (int i = 0; i < projects.size(); i++) {
-                    if (argProjectId.equals(projects.get(i).id)) { index = i; break; }
+            if (projets != null) {
+                for (Projet e : projets) {
+                    Project p = ProjetMapper.toModel(e);
+                    if (p != null) projectsCache.add(p);
                 }
             }
-            spinnerProjects.setSelection(index);
-            selectedProjectId = projects.get(index).id;
-            setupTasksForProject(selectedProjectId);
-        }
+
+            ArrayAdapter<Project> ad = new ArrayAdapter<>(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    projectsCache
+            );
+            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerProjects.setAdapter(ad);
+
+            spinnerProjects.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+                @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                    Project p = (Project) parent.getItemAtPosition(position);
+                    selectedProjectId = p.id;
+                    setupTasksForProject(selectedProjectId);
+                }
+                @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+            });
+
+            if (!projectsCache.isEmpty()) {
+                int index = 0;
+                if (argProjectId != null) {
+                    for (int i = 0; i < projectsCache.size(); i++) {
+                        if (argProjectId.equals(projectsCache.get(i).id)) { index = i; break; }
+                    }
+                }
+                spinnerProjects.setSelection(index);
+                selectedProjectId = projectsCache.get(index).id;
+                setupTasksForProject(selectedProjectId);
+            } else {
+                // aucun projet
+                selectedProjectId = null;
+                selectedTaskId = null;
+                spinnerTasks.setAdapter(null);
+                adapter.submit(Collections.emptyList());
+                tvTotal.setText("Tâche: 00:00:00 • Projet: 00:00:00");
+                textEmptySessions.setVisibility(View.VISIBLE);
+                updateTimerUi();
+            }
+        });
     }
 
     private void setupTasksForProject(String projectId) {
-        List<Task> tasks = FakeTaskStore.get().listByProject(projectId);
-        ArrayAdapter<Task> ad = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                tasks
-        );
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTasks.setAdapter(ad);
+        tacheRepo.getByProject(projectId, taches -> {
+            tasksCache = new ArrayList<>();
 
-        spinnerTasks.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                Task t = (Task) parent.getItemAtPosition(position);
-                selectedTaskId = t.id;
-                refreshSessions(selectedProjectId, selectedTaskId);
-                updateTimerUi();
-            }
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
-        });
-
-        if (!tasks.isEmpty()) {
-            int index = 0;
-            if (argTaskId != null) {
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (argTaskId.equals(tasks.get(i).id)) { index = i; break; }
+            if (taches != null) {
+                for (Tache e : taches) {
+                    Task t = TacheMapper.toModel(e);
+                    if (t != null) tasksCache.add(t);
                 }
             }
-            spinnerTasks.setSelection(index);
-            selectedTaskId = tasks.get(index).id;
-            refreshSessions(projectId, selectedTaskId);
-        } else {
-            selectedTaskId = null;
-            adapter.submit(Collections.emptyList());
-            tvTotal.setText("Tâche: 00:00:00 • Projet: 00:00:00");
-            textEmptySessions.setVisibility(View.VISIBLE);
-        }
 
-        updateTimerUi();
+            ArrayAdapter<Task> ad = new ArrayAdapter<>(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    tasksCache
+            );
+            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerTasks.setAdapter(ad);
+
+            spinnerTasks.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+                @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                    Task t = (Task) parent.getItemAtPosition(position);
+                    selectedTaskId = t.id;
+                    refreshSessions(selectedProjectId, selectedTaskId);
+                    updateTimerUi();
+                }
+                @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+            });
+
+            if (!tasksCache.isEmpty()) {
+                int index = 0;
+                if (argTaskId != null) {
+                    for (int i = 0; i < tasksCache.size(); i++) {
+                        if (argTaskId.equals(tasksCache.get(i).id)) { index = i; break; }
+                    }
+                }
+                spinnerTasks.setSelection(index);
+                selectedTaskId = tasksCache.get(index).id;
+                refreshSessions(projectId, selectedTaskId);
+            } else {
+                selectedTaskId = null;
+                adapter.submit(Collections.emptyList());
+                tvTotal.setText("Tâche: 00:00:00 • Projet: 00:00:00");
+                textEmptySessions.setVisibility(View.VISIBLE);
+            }
+
+            updateTimerUi();
+        });
     }
 
     private void refreshSessions(String projectId, String taskId) {
         if (projectId == null || taskId == null) return;
 
-        List<data.modele.TimeEntry> sessions = vm.getSessionsByTask(taskId);
-        adapter.submit(sessions);
+        vm.getSessionsByTask(taskId, sessions -> {
+            adapter.submit(sessions);
+            textEmptySessions.setVisibility((sessions == null || sessions.isEmpty()) ? View.VISIBLE : View.GONE);
+        });
 
-        textEmptySessions.setVisibility((sessions == null || sessions.isEmpty()) ? View.VISIBLE : View.GONE);
-
-        long totalTask = vm.getTotalTask(taskId);
-        long totalProject = vm.getTotalProject(projectId);
-        tvTotal.setText("Tâche: " + vm.format(totalTask) + " • Projet: " + vm.format(totalProject));
+        vm.getTotals(projectId, taskId, totals -> {
+            tvTotal.setText("Tâche: " + vm.format(totals.totalTask)
+                    + " • Projet: " + vm.format(totals.totalProject));
+        });
     }
 
     private void updateTimerUi() {
@@ -255,12 +303,12 @@ public class TimerFragment extends Fragment {
 
         if (isSelectedActive) {
             tvTimer.setText(vm.format(activeElapsed));
-            tvTimer.setTextColor(0xFF2F5BFF); // bleu
+            tvTimer.setTextColor(0xFF2F5BFF);
             btnPause.setEnabled(true);
             btnStop.setEnabled(true);
         } else {
             tvTimer.setText("00:00:00");
-            tvTimer.setTextColor(0xFFAEB7D0); // gris
+            tvTimer.setTextColor(0xFFAEB7D0);
             btnPause.setEnabled(false);
             btnStop.setEnabled(false);
         }

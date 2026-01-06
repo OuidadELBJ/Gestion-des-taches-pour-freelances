@@ -12,11 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.freelance.data.local.entity.Tache;
+import com.example.freelance.data.local.repository.TacheRepository;
+import com.example.freelance.data.mapper.TacheMapper;
 import com.example.freelance.databinding.FragmentAddTaskBinding;
 
 import java.util.concurrent.TimeUnit;
 
-import data.fake.FakeTaskStore;
 import data.modele.Task;
 
 public class AddTaskFragment extends Fragment {
@@ -25,8 +27,6 @@ public class AddTaskFragment extends Fragment {
 
     private String projectId = "";
     private String projectName = "Projet";
-    private android.widget.EditText etProjectNotes;
-    private com.google.android.material.button.MaterialButton btnSaveNotes;
 
     @Nullable
     @Override
@@ -86,17 +86,21 @@ public class AddTaskFragment extends Fragment {
                 ? now + TimeUnit.DAYS.toMillis(dueInDays)
                 : 0L;
 
-        boolean hasDeadline = deadlineMillis > 0;
+        boolean reminderEnabled = (deadlineMillis > 0);
 
         String id = "t" + System.currentTimeMillis();
 
-        Task t = new Task(id, projectId, title, estimatedMillis, deadlineMillis, hasDeadline);
+        Task t = new Task(id, projectId, title, estimatedMillis, deadlineMillis, reminderEnabled);
         t.useDefaultOffsets = true;
 
-        FakeTaskStore.get().add(t);
+        // ✅ Room insert + onDone (important)
+        TacheRepository repo = new TacheRepository(requireContext());
+        Tache entity = TacheMapper.toEntity(t);
 
-        Toast.makeText(getContext(), "Tâche ajoutée ✅", Toast.LENGTH_SHORT).show();
-        Navigation.findNavController(clickedView).navigateUp();
+        repo.insert(entity, () -> {
+            Toast.makeText(getContext(), "Tâche ajoutée ✅", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(clickedView).navigateUp();
+        });
     }
 
     private double parseDouble(String s, double def) {

@@ -1,6 +1,8 @@
 package com.example.freelance.data.local.repository;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.freelance.data.local.AppDatabase;
 import com.example.freelance.data.local.dao.ProjetDao;
@@ -11,71 +13,41 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-
 public class ProjetRepository {
 
-    private final ProjetDao projetDao;
-    private final Executor executor;
+    public interface Callback<T> { void onResult(T value); }
+
+    private final ProjetDao dao;
+    private final Executor io = Executors.newSingleThreadExecutor();
+    private final Handler main = new Handler(Looper.getMainLooper());
 
     public ProjetRepository(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
-        this.projetDao = database.projetDao();
-        this.executor = Executors.newSingleThreadExecutor();
+        dao = AppDatabase.getInstance(context.getApplicationContext()).projetDao();
     }
 
-    // -------------------------
-    // CRUD
-    // -------------------------
+    public void insert(Projet p) { io.execute(() -> dao.insert(p)); }
+    public void update(Projet p) { io.execute(() -> dao.update(p)); }
+    public void delete(Projet p) { io.execute(() -> dao.delete(p)); }
 
-    public void insert(Projet projet) {
-        executor.execute(() -> projetDao.insert(projet));
+    public void getAll(Callback<List<Projet>> cb) {
+        io.execute(() -> {
+            List<Projet> res = dao.getAll();
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    public void update(Projet projet) {
-        executor.execute(() -> projetDao.update(projet));
+    public void getById(String id, Callback<Projet> cb) {
+        io.execute(() -> {
+            Projet res = dao.getById(id);
+            main.post(() -> cb.onResult(res));
+        });
     }
 
-    public void delete(Projet projet) {
-        executor.execute(() -> projetDao.delete(projet));
+    // ✅ notes en Room
+    public void updateDescription(String id, String description, Date lastUpdated) {
+        io.execute(() -> dao.updateDescription(id, description, lastUpdated));
     }
 
-    // -------------------------
-    // READ
-    // -------------------------
-
-    public Projet getById(String id) {
-        return projetDao.getById(id);
-    }
-
-    public List<Projet> getAll() {
-        return projetDao.getAll();
-    }
-
-    // -------------------------
-    // Requêtes métier
-    // -------------------------
-
-    public List<Projet> getUnsynced() {
-        return projetDao.getUnsynced();
-    }
-
-    public void updateStatus(String id, String status) {
-        executor.execute(() -> projetDao.updateStatus(id, status));
-    }
-
-    public List<Projet> getByStatus(String status) {
-        return projetDao.getByStatus(status);
-    }
-
-    public void updateHourlyRate(String id, double rate, Date lastUpdated) {
-        executor.execute(() -> projetDao.updateHourlyRate(id, rate, lastUpdated));
-    }
-
-    public List<Projet> getByDeadline() {
-        return projetDao.getByDeadline();
-    }
-
-    public List<Projet> getOverdue(Date now) {
-        return projetDao.getOverdue(now);
-    }
+    // Sync (IO thread only)
+    public Projet getByIdSync(String id) { return dao.getById(id); }
 }

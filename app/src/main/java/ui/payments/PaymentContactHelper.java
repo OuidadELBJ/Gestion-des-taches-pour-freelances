@@ -18,6 +18,9 @@ public class PaymentContactHelper {
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         intent.putExtra("sms_body", message);
 
+        // Petit bonus : si tu es hors activity (ex: adapter), ça peut crash sans ce flag
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         try {
             c.startActivity(intent);
         } catch (Exception e) {
@@ -36,6 +39,7 @@ public class PaymentContactHelper {
         intent.setData(Uri.parse("mailto:" + Uri.encode(email)));
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         try {
             c.startActivity(intent);

@@ -17,6 +17,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.repository.ProjetRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,9 +27,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import data.fake.FakeProjectStore;
-import data.modele.Project;
 
 public class ProjectListFragment extends Fragment {
 
@@ -38,13 +37,17 @@ public class ProjectListFragment extends Fragment {
 
     private ProjectListAdapter adapter;
     private final List<ProjectUiModel> fullList = new ArrayList<>();
-    private ProjectUiModel.Status currentStatusFilter = null; // null = Tous
+    private ProjectUiModel.Status currentStatusFilter = null;
 
     private ActivityResultLauncher<Intent> addProjectLauncher;
+
+    private ProjetRepository projetRepo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        projetRepo = new ProjetRepository(requireContext());
 
         addProjectLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -66,27 +69,35 @@ public class ProjectListFragment extends Fragment {
 
                     if (name == null || clientName == null || deadlineStr == null) return;
 
-                    // ✅ 1) créer le vrai Project
                     String newId = "p" + System.currentTimeMillis();
-                    Project p = new Project(newId, name);
-                    p.clientName = clientName;
-                    p.clientEmail = (clientEmail == null ? "" : clientEmail);
-                    p.clientPhone = (clientPhone == null ? "" : clientPhone);
-                    p.status = (statusStr == null ? "En cours" : statusStr);
-                    p.notes = (notes == null ? "" : notes);
 
-                    // Budget/Hourly : on garde ton UX simple
-                    p.budgetAmount = budget;
-                    p.rate = hourly;
-                    p.billingType = Project.BILLING_PROJECT;
+                    Date deadlineDate = parseDate(deadlineStr);
 
-                    // Deadline string -> millis (dd/MM/yyyy)
-                    p.deadlineMillis = parseDateToMillis(deadlineStr);
+                    // ✅ INSERT Room (description = notes)
+                    Projet entity = new Projet(
+                            newId,
+                            name,
+                            (notes == null ? "" : notes),
+                            clientName,
+                            0,           // billingType (0=PROJECT)
+                            budget,      // budgetAmount
+                            hourly,      // rate (si tu veux l'utiliser plus tard)
+                            0, 0, 0,     // estimatedHours/Days/Months
+                            deadlineDate,
+                            false,       // reminderEnabled
+                            true,        // useDefaultOffsets
+                            null,        // customOffsets
+                            (statusStr == null ? "En cours" : statusStr),
+                            false,       // isSynced
+                            new Date(),  // lastUpdated
+                            (clientEmail == null ? "" : clientEmail),
+                            (clientPhone == null ? "" : clientPhone)
+                    );
 
-                    FakeProjectStore.get().add(p);
+                    projetRepo.insert(entity);
 
-                    // ✅ 2) recharger la liste depuis le store (source unique)
-                    loadFromStore();
+                    // refresh list
+                    loadFromRoom();
                 }
         );
     }
@@ -130,42 +141,45 @@ public class ProjectListFragment extends Fragment {
 
         recyclerProjects.setAdapter(adapter);
 
-        loadFromStore();
+        loadFromRoom();
         setupSearch();
         setupChips();
         setupFab();
     }
 
-    private void loadFromStore() {
-        fullList.clear();
+    private void loadFromRoom() {
+        projetRepo.getAll(entities -> {
+            fullList.clear();
 
-        List<Project> projects = FakeProjectStore.get().list();
-        for (Project p : projects) {
-            String deadlineText = (p.deadlineMillis > 0)
-                    ? "Deadline : " + new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(new Date(p.deadlineMillis))
-                    : "Deadline : -";
+            if (entities != null) {
+                for (Projet p : entities) {
 
-            String budgetText = String.format(Locale.FRANCE, "%.0f €", p.expectedAmount());
+                    String deadlineText = (p.getDeadline() != null)
+                            ? "Deadline : " + new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(p.getDeadline())
+                            : "Deadline : -";
 
-            ProjectUiModel.Status st = mapStatus(p.status);
+                    String budgetText = String.format(Locale.FRANCE, "%.0f €", p.getBudgetAmount());
 
-            fullList.add(new ProjectUiModel(
-                    p.id,
-                    p.name,
-                    (p.clientName == null ? "" : p.clientName),
-                    deadlineText,
-                    budgetText,
-                    "0h suivies",
-                    "Tâches : 0/0",
-                    "Dernière activité : -",
-                    0,
-                    st
-            ));
-        }
+                    ProjectUiModel.Status st = mapStatus(p.getStatus());
 
-        applyFilters();
+                    fullList.add(new ProjectUiModel(
+                            p.getIdProjet(),
+                            p.getName(),
+                            (p.getClientName() == null ? "" : p.getClientName()),
+                            deadlineText,
+                            budgetText,
+                            "0h suivies",
+                            "Tâches : 0/0",
+                            "Dernière activité : -",
+                            0,
+                            st
+                    ));
+                }
+            }
 
-        if (recyclerProjects != null) recyclerProjects.scrollToPosition(0);
+            applyFilters();
+            if (recyclerProjects != null) recyclerProjects.scrollToPosition(0);
+        });
     }
 
     private ProjectUiModel.Status mapStatus(String statusStr) {
@@ -177,13 +191,12 @@ public class ProjectListFragment extends Fragment {
         return ProjectUiModel.Status.IN_PROGRESS;
     }
 
-    private long parseDateToMillis(String ddMMyyyy) {
+    private Date parseDate(String ddMMyyyy) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-            Date d = sdf.parse(ddMMyyyy);
-            return d != null ? d.getTime() : 0L;
+            return sdf.parse(ddMMyyyy);
         } catch (Exception e) {
-            return 0L;
+            return null;
         }
     }
 

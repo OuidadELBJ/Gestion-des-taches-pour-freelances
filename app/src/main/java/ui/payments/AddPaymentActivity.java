@@ -10,7 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.freelance.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
-import data.fake.FakePaymentStore;
+import java.util.UUID;
+
+import data.modele.Payment;
+
+import com.example.freelance.data.local.entity.Paiement;
+import com.example.freelance.data.local.repository.PaiementRepository;
+import com.example.freelance.data.mapper.PaymentMapper;
 
 public class AddPaymentActivity extends AppCompatActivity {
 
@@ -18,11 +24,14 @@ public class AddPaymentActivity extends AppCompatActivity {
     private android.widget.CheckBox cbPaid;
     private String projectId;
 
+    private PaiementRepository repo;
+
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_payment);
 
-        // Toolbar (style identique aux autres pages)
+        repo = new PaiementRepository(getApplicationContext());
+
         MaterialToolbar toolbar = findViewById(R.id.toolbarAddPayment);
         if (toolbar != null) {
             toolbar.setTitle("Ajouter paiement");
@@ -62,7 +71,22 @@ public class AddPaymentActivity extends AppCompatActivity {
             long now = System.currentTimeMillis();
             long due = now + dueInDays * 24L * 60L * 60L * 1000L;
 
-            FakePaymentStore.get().add(projectId, amount, now, due, paid, note);
+            // ✅ UI Model
+            Payment m = new Payment(
+                    UUID.randomUUID().toString(),
+                    projectId,
+                    amount,
+                    now,
+                    due,
+                    paid,
+                    note
+            );
+
+            // ✅ Map -> Room Entity + insert
+            Paiement entity = PaymentMapper.toEntity(m);
+            repo.insert(entity);
+
+            Toast.makeText(this, "Paiement ajouté ✅", Toast.LENGTH_SHORT).show();
             finish();
         });
     }

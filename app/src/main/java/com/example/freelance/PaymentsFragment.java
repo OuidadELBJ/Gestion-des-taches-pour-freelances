@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.example.freelance.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +49,7 @@ public class PaymentsFragment extends Fragment {
     private Integer filterMonth = null; // 0..11
     private Integer filterYear = null;
 
-    // Wrappers cliquables pour rendre les flèches plus claires
+    // Wrappers cliquables
     private View rowProject, rowMonth, rowYear;
 
     @Nullable
@@ -65,22 +64,20 @@ public class PaymentsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        vm = new PaymentsViewModel();
+        // ✅ IMPORTANT : ViewModel Room a besoin du context
+        vm = new PaymentsViewModel(requireContext());
+        vm.debugInsertTestPayment(selectedProjectId);
+
 
         toolbar = view.findViewById(R.id.toolbarPayments);
         toolbar.setTitle("Paiements");
         toolbar.setTitleTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
-        toolbar.setNavigationIcon(R.drawable.ic_back); // ton icône retour
+        toolbar.setNavigationIcon(R.drawable.ic_back);
         if (toolbar.getNavigationIcon() != null) {
             toolbar.getNavigationIcon().setTint(ContextCompat.getColor(requireContext(), android.R.color.white));
         }
-        toolbar.setNavigationOnClickListener(v -> {
-            // si tu es venu depuis ProjectDetail -> revient
-            // sinon ne fait rien (tu peux aussi faire navigateUp)
-            Navigation.findNavController(v).navigateUp();
-        });
+        toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
-        // IDs existants (logique D)
         spinnerProjects = view.findViewById(R.id.spinnerProjectsPayments);
         spinnerMonth = view.findViewById(R.id.spinnerMonth);
         spinnerYear = view.findViewById(R.id.spinnerYear);
@@ -94,13 +91,12 @@ public class PaymentsFragment extends Fragment {
 
         RecyclerView rv = view.findViewById(R.id.rvPayments);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new PaymentsAdapter();
+        adapter = new PaymentsAdapter(requireContext());
         rv.setAdapter(adapter);
 
         Button btnAdd = view.findViewById(R.id.btnAddPayment);
         Button btnClear = view.findViewById(R.id.btnClearFilter);
 
-        // Wrappers UI (pour supprimer le côté "plein de flèches")
         rowProject = view.findViewById(R.id.rowSelectProject);
         rowMonth = view.findViewById(R.id.rowSelectMonth);
         rowYear = view.findViewById(R.id.rowSelectYear);
@@ -167,7 +163,6 @@ public class PaymentsFragment extends Fragment {
             @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
         });
 
-        // Si tu viens d’un projet (args), pré-sélectionne
         if (!projects.isEmpty()) {
             int index = 0;
             if (selectedProjectId != null) {
@@ -197,7 +192,7 @@ public class PaymentsFragment extends Fragment {
         Calendar c = Calendar.getInstance();
         int yNow = c.get(Calendar.YEAR);
         List<Integer> years = new ArrayList<>();
-        years.add(0); // "Tous"
+        years.add(0); // Tous
         for (int y = yNow - 3; y <= yNow + 1; y++) years.add(y);
 
         ArrayAdapter<Integer> yearAd = new ArrayAdapter<>(requireContext(),
@@ -229,27 +224,22 @@ public class PaymentsFragment extends Fragment {
     private void loadPayments() {
         if (selectedProjectId == null) return;
 
-        List<?> list;
+        vm.loadPayments(selectedProjectId, filterMonth, filterYear, state -> {
 
-        if (filterMonth != null && filterYear != null) {
-            list = vm.listByMonth(selectedProjectId, filterMonth, filterYear);
-            adapter.submit(vm.listByMonth(selectedProjectId, filterMonth, filterYear));
-            tvTotalReceived.setText("Reçu (filtré) : " + vm.money(vm.totalReceivedByMonth(selectedProjectId, filterMonth, filterYear)));
-        } else {
-            list = vm.list(selectedProjectId);
-            adapter.submit(vm.list(selectedProjectId));
-            tvTotalReceived.setText("Reçu : " + vm.money(vm.totalReceived(selectedProjectId)));
-        }
+            adapter.submit(state.list);
 
-        double expected = vm.expectedAmount(selectedProjectId);
-        double received = vm.totalReceived(selectedProjectId);
+            if (state.filtered) {
+                tvTotalReceived.setText("Reçu (filtré) : " + vm.money(state.received));
+            } else {
+                tvTotalReceived.setText("Reçu : " + vm.money(state.received));
+            }
 
-        tvExpected.setText("Attendu : " + vm.money(expected));
-        tvRemaining.setText("Reste : " + vm.money(vm.remaining(expected, received)));
-        progress.setProgress(vm.progressPercent(expected, received));
+            tvExpected.setText("Attendu : " + vm.money(state.expected));
+            tvRemaining.setText("Reste : " + vm.money(state.remaining));
+            progress.setProgress(state.progressPercent);
 
-        // Empty state
-        boolean isEmpty = (list == null) || list.isEmpty();
-        tvEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            boolean isEmpty = (state.list == null) || state.list.isEmpty();
+            tvEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        });
     }
 }

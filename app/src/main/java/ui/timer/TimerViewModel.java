@@ -1,26 +1,66 @@
 package ui.timer;
 
-import java.util.List;
+import android.content.Context;
 
-import data.fake.FakeTimeEntryStore;
-import data.modele.TimeEntry;
+import com.example.freelance.data.local.entity.TimeEntry;
+import com.example.freelance.data.local.repository.TimeEntryRepository;
+import com.example.freelance.data.mapper.TimeEntryMapper;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class TimerViewModel {
 
+    public interface Callback<T> { void onResult(T value); }
+
+    public static class Totals {
+        public final long totalTask;
+        public final long totalProject;
+        public Totals(long totalTask, long totalProject) {
+            this.totalTask = totalTask;
+            this.totalProject = totalProject;
+        }
+    }
+
+    private final TimeEntryRepository repo;
+
+    public TimerViewModel(Context context) {
+        repo = new TimeEntryRepository(context.getApplicationContext());
+    }
+
+    // ✅ à l'arrêt du service → on insère une session
     public void addSession(String projectId, String taskId, long startMillis, long endMillis) {
-        FakeTimeEntryStore.get().add(projectId, taskId, startMillis, endMillis);
+        long duration = Math.max(0, endMillis - startMillis);
+
+        TimeEntry e = new TimeEntry(
+                UUID.randomUUID().toString(),
+                taskId,
+                projectId,
+                new Date(startMillis),
+                new Date(endMillis),
+                duration,
+                false,        // isRunning
+                new Date(),    // lastUpdated
+                false,        // isSynced
+                false,        // isPaused
+                0L,           // pausedAccumulated
+                null          // note
+        );
+
+        repo.insert(e);
     }
 
-    public List<TimeEntry> getSessionsByTask(String taskId) {
-        return FakeTimeEntryStore.get().listByTask(taskId);
+    public void getSessionsByTask(String taskId, Callback<List<data.modele.TimeEntry>> cb) {
+        repo.getByTask(taskId, entities -> cb.onResult(TimeEntryMapper.toModelList(entities)));
     }
 
-    public long getTotalTask(String taskId) {
-        return FakeTimeEntryStore.get().totalTask(taskId);
-    }
-
-    public long getTotalProject(String projectId) {
-        return FakeTimeEntryStore.get().totalProject(projectId);
+    public void getTotals(String projectId, String taskId, Callback<Totals> cb) {
+        repo.getTotalTask(taskId, totalTask ->
+                repo.getTotalProject(projectId, totalProject ->
+                        cb.onResult(new Totals(totalTask, totalProject))
+                )
+        );
     }
 
     public String format(long ms) {
