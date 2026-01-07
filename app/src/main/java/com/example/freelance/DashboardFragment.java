@@ -20,6 +20,11 @@ public class DashboardFragment extends Fragment {
     private TextView textUrgentTasksTitle, textTaskLine1, textTaskLine2, textSeeAllTasks;
     private ImageView imageProfile;
 
+    // ✅ Projet récent (UI)
+    private TextView textRecentProjectTitle, textRecentProjectSubtitle;
+
+    private com.example.freelance.data.local.repository.DashboardRepository dashRepo;
+
     private MaterialCardView cardStatsProjects, cardStatsTime, cardStatsPayments;
     private MaterialCardView cardTodayTasks, cardRecentProject;
 
@@ -29,6 +34,12 @@ public class DashboardFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDashboard();
     }
 
     @Override
@@ -47,6 +58,10 @@ public class DashboardFragment extends Fragment {
         textTaskLine2 = view.findViewById(R.id.textTaskLine2);
         textSeeAllTasks = view.findViewById(R.id.textSeeAllTasks);
 
+        // --- Projet récent ---
+        textRecentProjectTitle = view.findViewById(R.id.textRecentProjectTitle);
+        textRecentProjectSubtitle = view.findViewById(R.id.textRecentProjectSubtitle);
+
         // --- Profil ---
         imageProfile = view.findViewById(R.id.imageProfile);
 
@@ -57,16 +72,9 @@ public class DashboardFragment extends Fragment {
         cardTodayTasks = view.findViewById(R.id.cardTodayTasks);
         cardRecentProject = view.findViewById(R.id.cardRecentProject);
 
-        // Fake data
-        textProjectsCount.setText("6");
-        textTimeThisWeekValue.setText("12h 30");
-        textPaymentsThisMonthValue.setText("1 200 €");
+        dashRepo = new com.example.freelance.data.local.repository.DashboardRepository(requireContext());
 
-        textUrgentTasksTitle.setText("2 tâches à faire avant demain");
-        textTaskLine1.setText("• Finaliser maquette App mobile B");
-        textTaskLine2.setText("• Préparer devis Branding C");
-
-        // ---------- Navigation ----------
+        // ---------- Navigation fixe ----------
         imageProfile.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(
                         R.id.action_dashboardFragment_to_profileFragment
@@ -86,9 +94,7 @@ public class DashboardFragment extends Fragment {
         );
 
         cardStatsTime.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(
-                        R.id.timerFragment
-                )
+                Navigation.findNavController(v).navigate(R.id.timerFragment)
         );
 
         View.OnClickListener goProjects = v ->
@@ -99,10 +105,74 @@ public class DashboardFragment extends Fragment {
         cardTodayTasks.setOnClickListener(goProjects);
         textSeeAllTasks.setOnClickListener(goProjects);
 
-        cardRecentProject.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-            args.putString("projectId", "P1"); // TODO remplacer par un vrai id
-            Navigation.findNavController(v).navigate(R.id.projectDetailFragment, args);
+        // ✅ charge les vraies données
+        loadDashboard();
+    }
+
+    private void loadDashboard() {
+        if (dashRepo == null) return;
+
+        dashRepo.load(data -> {
+            // --- Stats ---
+            textProjectsCount.setText(String.valueOf(data.projectsCount));
+            textPaymentsThisMonthValue.setText(formatEuro(data.paymentsThisMonth));
+            textTimeThisWeekValue.setText(formatDuration(data.timeThisWeekMillis));
+
+            // --- Projet récent ---
+            if (data.latestProject != null) {
+                textRecentProjectTitle.setText(safe(data.latestProject.getName()));
+                textRecentProjectSubtitle.setText("Voir le détail du projet");
+
+                cardRecentProject.setEnabled(true);
+                cardRecentProject.setAlpha(1f);
+
+                cardRecentProject.setOnClickListener(v -> {
+                    Bundle args = new Bundle();
+                    args.putString("projectId", data.latestProject.getIdProjet());
+                    args.putString("projectName", data.latestProject.getName());
+                    Navigation.findNavController(v).navigate(R.id.projectDetailFragment, args);
+                });
+
+            } else {
+                textRecentProjectTitle.setText("Aucun projet");
+                textRecentProjectSubtitle.setText("Crée ton premier projet");
+
+                cardRecentProject.setEnabled(false);
+                cardRecentProject.setAlpha(0.6f);
+                cardRecentProject.setOnClickListener(null);
+            }
+
+            // --- Urgent tasks ---
+            if (data.urgentCount <= 0) {
+                textUrgentTasksTitle.setText("Aucune tâche urgente");
+                textTaskLine1.setText("");
+                textTaskLine2.setText("");
+            } else {
+                textUrgentTasksTitle.setText(data.urgentCount + " tâche(s) à faire avant demain");
+
+                String l1 = (data.urgentTasks != null && data.urgentTasks.size() >= 1)
+                        ? "• " + safe(data.urgentTasks.get(0).getTitle())
+                        : "";
+                String l2 = (data.urgentTasks != null && data.urgentTasks.size() >= 2)
+                        ? "• " + safe(data.urgentTasks.get(1).getTitle())
+                        : "";
+
+                textTaskLine1.setText(l1);
+                textTaskLine2.setText(l2);
+            }
         });
     }
+
+    private String formatEuro(double v) {
+        return String.format(java.util.Locale.FRANCE, "%,.2f €", v);
+    }
+
+    private String formatDuration(long millis) {
+        long totalMin = millis / 60000L;
+        long h = totalMin / 60;
+        long m = totalMin % 60;
+        return h + "h " + m;
+    }
+
+    private String safe(String s) { return s == null ? "" : s; }
 }

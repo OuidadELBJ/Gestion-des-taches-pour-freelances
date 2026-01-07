@@ -9,7 +9,7 @@
 
     <color name="color_secondary">#FF9800</color>          <!-- orange accent -->
     <color name="color_on_secondary">#FFFFFFFF</color>
-    <color name="color_warning_orange">#FFA24A</color>
+    <color name="color_warning_orange">#FF8A00</color>
     <color name="color_done_green">#2ECC71</color>
 
     <!-- Surfaces / fonds -->
@@ -22,7 +22,7 @@
 
     <color name="textPrimary">@color/color_on_surface</color>
     <color name="textSecondary">#7A8194</color>
-    <color name="color_primary">#32007C</color>
+    <color name="color_primary">#2F5BFF</color>
 
     <!-- Assure-toi que les autres couleurs utilisées par ton thème sont aussi là -->
     <color name="black">#FF000000</color>
@@ -35,9 +35,9 @@
 
     <color name="bottom_nav_text_selected">@color/colorPrimary</color>
     <color name="bottom_nav_text_unselected">#9AA1B8</color>
-    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimary">#1D3AA6</color>
     <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#2196F3</color>
+    <color name="colorAccent">#1D3AA6 </color>
     <color name="backgroundGray">#F5F5F5</color>
     <color name="white">#FFFFFF</color>
 

@@ -5,11 +5,12 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "notifications")
-
 public class NotificationReminder {
+
     public static final String TYPE_TASK = "TASK";
     public static final String TYPE_PROJECT = "PROJECT";
     public static final String TYPE_PAYMENT = "PAYMENT";
+
     public static final String STATUS_SCHEDULED = "SCHEDULED";
     public static final String STATUS_FIRED = "FIRED";
     public static final String STATUS_CANCELED = "CANCELED";
@@ -17,27 +18,30 @@ public class NotificationReminder {
     @PrimaryKey
     @NonNull
     private String id;
-    // TASK / PROJECT / PAYMENT
+
     @NonNull
     private String targetType;
-    // Liens (nullable selon type)
+
     private String projectId;
     private String taskId;
     private String paymentId;
-    // Quand la notif doit être affichée
+
     private long triggerAtMillis;
-    // Exemple : 10m / 1h / 1d avant
     private long offsetMillis;
+
     private String title;
     private String message;
-    // SCHEDULED / FIRED / CANCELED
+
     @NonNull
     private String status;
-    // Pour WorkManager (enqueueUniqueWork)
+
     private String workName;
+
     private long createdAtMillis;
     private long lastUpdatedMillis;
+
     private boolean isSynced;
+
     public NotificationReminder(
             @NonNull String id,
             @NonNull String targetType,
@@ -77,7 +81,6 @@ public class NotificationReminder {
     public void setTargetType(@NonNull String targetType) { this.targetType = targetType; }
 
     public String getProjectId() { return projectId; }
-
     public void setProjectId(String projectId) { this.projectId = projectId; }
 
     public String getTaskId() { return taskId; }
@@ -112,5 +115,4 @@ public class NotificationReminder {
 
     public boolean isSynced() { return isSynced; }
     public void setSynced(boolean synced) { isSynced = synced; }
-
 }

@@ -11,8 +11,10 @@ import com.example.freelance.data.local.entity.Tache;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import notifications.ReminderScheduler;
 
 public class TacheRepository {
+    private final Context appContext;
 
     public interface Callback<T> { void onResult(T value); }
 
@@ -21,6 +23,7 @@ public class TacheRepository {
     private final Handler main = new Handler(Looper.getMainLooper());
 
     public TacheRepository(Context context) {
+        this.appContext = context.getApplicationContext();
         dao = AppDatabase.getInstance(context.getApplicationContext()).tacheDao();
     }
 
@@ -38,11 +41,17 @@ public class TacheRepository {
     }
 
     public void update(Tache t) {
-        io.execute(() -> dao.update(t));
+        io.execute(() -> {
+            dao.update(t);
+            ReminderScheduler.onTaskUpsert(appContext, t);
+        });
     }
 
     public void delete(Tache t) {
-        io.execute(() -> dao.delete(t));
+        io.execute(() -> {
+            dao.delete(t);
+            ReminderScheduler.onTaskDeleted(appContext, t.getIdTache());
+        });
     }
 
     public void getByProject(String projectId, Callback<List<Tache>> cb) {

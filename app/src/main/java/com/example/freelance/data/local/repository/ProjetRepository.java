@@ -7,6 +7,7 @@ import android.os.Looper;
 import com.example.freelance.data.local.AppDatabase;
 import com.example.freelance.data.local.dao.ProjetDao;
 import com.example.freelance.data.local.entity.Projet;
+import notifications.ReminderScheduler;
 
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ProjetRepository {
-
+    private final Context appContext;
     public interface Callback<T> { void onResult(T value); }
 
     private final ProjetDao dao;
@@ -22,13 +23,30 @@ public class ProjetRepository {
     private final Handler main = new Handler(Looper.getMainLooper());
 
     public ProjetRepository(Context context) {
+        this.appContext = context.getApplicationContext();
         dao = AppDatabase.getInstance(context.getApplicationContext()).projetDao();
     }
 
-    public void insert(Projet p) { io.execute(() -> dao.insert(p)); }
-    public void update(Projet p) { io.execute(() -> dao.update(p)); }
-    public void delete(Projet p) { io.execute(() -> dao.delete(p)); }
+    public void insert(Projet p) {
+        io.execute(() -> {
+            dao.insert(p);
+            ReminderScheduler.onProjectUpsert(appContext, p);
+        });
+    }
 
+    public void update(Projet p) {
+        io.execute(() -> {
+            dao.update(p);
+            ReminderScheduler.onProjectUpsert(appContext, p);
+        });
+    }
+
+    public void delete(Projet p) {
+        io.execute(() -> {
+            dao.delete(p);
+            ReminderScheduler.onProjectDeleted(appContext, p.getIdProjet());
+        });
+    }
     public void getAll(Callback<List<Projet>> cb) {
         io.execute(() -> {
             List<Projet> res = dao.getAll();

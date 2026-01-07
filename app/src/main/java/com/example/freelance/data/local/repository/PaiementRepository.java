@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import notifications.ReminderScheduler;
 
 public class PaiementRepository {
 
@@ -22,12 +23,13 @@ public class PaiementRepository {
     private final PaiementDao paiementDao;
     private final Executor io;
     private final Handler main;
-
+    private final Context appContext;
     public PaiementRepository(Context context) {
         AppDatabase db = AppDatabase.getInstance(context.getApplicationContext());
         this.paiementDao = db.paiementDao();
         this.io = Executors.newSingleThreadExecutor();
         this.main = new Handler(Looper.getMainLooper());
+        this.appContext = context.getApplicationContext();
     }
 
     // -------------------------------------------------
@@ -41,15 +43,27 @@ public class PaiementRepository {
     // CRUD (async)
     // -------------------------------------------------
     public void insert(Paiement paiement) {
-        io.execute(() -> paiementDao.insert(paiement));
+        io.execute(() -> {
+            paiementDao.insert(paiement);
+            // ✅ linkage notifications
+            ReminderScheduler.onPaymentUpsert(appContext, paiement);
+        });
     }
 
     public void update(Paiement paiement) {
-        io.execute(() -> paiementDao.update(paiement));
+        io.execute(() -> {
+            paiementDao.update(paiement);
+            // ✅ linkage notifications
+            ReminderScheduler.onPaymentUpsert(appContext, paiement);
+        });
     }
 
     public void delete(Paiement paiement) {
-        io.execute(() -> paiementDao.delete(paiement));
+        io.execute(() -> {
+            paiementDao.delete(paiement);
+            // ✅ linkage notifications
+            ReminderScheduler.onPaymentDeleted(appContext, paiement.getIdPaiement());
+        });
     }
 
     public void markAsSynced(String id, Date lastUpdated) {

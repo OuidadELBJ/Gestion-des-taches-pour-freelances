@@ -1,5 +1,6 @@
 package com.example.freelance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,6 +25,7 @@ import com.example.freelance.data.local.entity.Projet;
 import com.example.freelance.data.local.entity.Tache;
 import com.example.freelance.data.local.repository.ProjetRepository;
 import com.example.freelance.data.local.repository.TacheRepository;
+import com.example.freelance.data.repository.FirestoreRepository;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import notifications.ReminderScheduler;
 
 public class ProjectDetailFragment extends Fragment {
 
@@ -181,22 +186,96 @@ public class ProjectDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadTasksFromRoom();
-        loadProjectFromRoom(); // refresh notes + header + contact
+        loadProjectFromRoom();
     }
 
+    // ✅ Remplacement des TOAST TODO
     private boolean onToolbarMenuItemClicked(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_edit_project) {
-            Toast.makeText(getContext(), "Modifier (TODO)", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == R.id.action_archive_project) {
-            Toast.makeText(getContext(), "Archiver (TODO)", Toast.LENGTH_SHORT).show();
+
+        if (id == R.id.action_archive_project) {
+            archiveProject();
             return true;
         } else if (id == R.id.action_delete_project) {
-            Toast.makeText(getContext(), "Supprimer (TODO)", Toast.LENGTH_SHORT).show();
+            confirmDeleteProject();
+            return true;
+        } else if (id == R.id.action_edit_project) {
+            openEditProject();
             return true;
         }
         return false;
+    }
+
+    private void openEditProject() {
+        if (TextUtils.isEmpty(projectId)) return;
+
+        // Si ton AddProjectActivity supporte l'édition, passe l'id
+        Intent i = new Intent(requireContext(), AddProjectActivity.class);
+        i.putExtra("mode", "edit");
+        i.putExtra("projectId", projectId);
+        startActivity(i);
+    }
+
+    private void archiveProject() {
+        if (currentProjet == null) return;
+
+        // 1) update local entity (Room)
+        // ⚠️ si tes setters n'existent pas, dis-moi et je t'adapte via Dao Query
+        currentProjet.setStatus("ARCHIVED");
+        currentProjet.setReminderEnabled(false);
+        currentProjet.setLastUpdated(new Date());
+        currentProjet.setSynced(false);
+
+        projetRepo.update(currentProjet);
+
+        // 2) cancel reminders projet
+        ReminderScheduler.cancelProject(requireContext().getApplicationContext(), currentProjet.getIdProjet());
+
+        // 3) push Firestore (sinon au prochain sync tu reverras l'ancien statut)
+        new FirestoreRepository().upsertProjet(currentProjet, new FirestoreRepository.OnComplete() {
+            @Override public void onSuccess() { /* ok */ }
+            @Override public void onError(Exception e) { /* ignore ou log */ }
+        });
+
+        Toast.makeText(getContext(), "Projet archivé ✅", Toast.LENGTH_SHORT).show();
+        loadProjectFromRoom();
+    }
+
+    private void confirmDeleteProject() {
+        if (currentProjet == null) return;
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Supprimer le projet")
+                .setMessage("Cette action est irréversible.")
+                .setNegativeButton("Annuler", null)
+                .setPositiveButton("Supprimer", (d, w) -> deleteProjectNow())
+                .show();
+    }
+
+    private void deleteProjectNow() {
+        if (currentProjet == null) return;
+
+        String pid = currentProjet.getIdProjet();
+
+        // 1) delete Room
+        projetRepo.delete(currentProjet);
+
+        // 2) cancel reminders
+        notifications.ReminderScheduler.onProjectDeleted(requireContext(), pid);
+
+        // 3) delete Firestore (optionnel)
+        new com.example.freelance.data.repository.FirestoreRepository()
+                .deleteProjet(pid, new com.example.freelance.data.repository.FirestoreRepository.OnComplete() {
+                    @Override public void onSuccess() {
+                        // ok
+                    }
+                    @Override public void onError(Exception e) {
+                        // ne bloque pas la suppression locale
+                    }
+                });
+
+        android.widget.Toast.makeText(getContext(), "Projet supprimé ✅", android.widget.Toast.LENGTH_SHORT).show();
+        requireActivity().onBackPressed();
     }
 
     // ✅ charge projet depuis Room (header + notes + contacts)
@@ -206,7 +285,6 @@ public class ProjectDetailFragment extends Fragment {
         projetRepo.getById(projectId, p -> {
             currentProjet = p;
 
-            // fallback si projet pas en DB
             if (p == null) {
                 textProjectTitleHeader.setText(projectName);
                 textProjectClientHeader.setText("-");
@@ -221,7 +299,6 @@ public class ProjectDetailFragment extends Fragment {
                 return;
             }
 
-            // HEADER
             String title = safe(p.getName());
             String client = safe(p.getClientName());
             String status = safe(p.getStatus());
@@ -236,7 +313,6 @@ public class ProjectDetailFragment extends Fragment {
             textDeadlineHeader.setText(deadlineTxt);
             textStatusBadgeHeader.setText(status.isEmpty() ? "En cours" : status);
 
-            // (tu brancheras plus tard paiements/temps)
             textAmountPlanned.setText("0 €");
             textAmountPaid.setText("0 €");
             textAmountRemaining.setText("0 €");
@@ -245,12 +321,10 @@ public class ProjectDetailFragment extends Fragment {
             progressGlobal.setProgress(0);
             textProgressGlobal.setText("0%");
 
-            // NOTES
             String notes = safe(p.getDescription());
             etProjectNotes.setText(notes);
             tvNotesPlaceholder.setVisibility(TextUtils.isEmpty(notes.trim()) ? View.VISIBLE : View.GONE);
 
-            // CONTACT
             String phone = safe(p.getClientPhone());
             String email = safe(p.getClientEmail());
 
@@ -273,7 +347,6 @@ public class ProjectDetailFragment extends Fragment {
                 ui.payments.PaymentContactHelper.openEmail(requireContext(), email, subject, msg);
             });
 
-            // Fake tabs
             bindFakeTimeTab();
             bindFakePaymentsTab();
         });

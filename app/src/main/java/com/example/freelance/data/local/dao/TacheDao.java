@@ -27,7 +27,14 @@ public interface TacheDao {
     // --------- READ ---------
     @Query("SELECT * FROM taches")
     List<Tache> getAll();
+    @Query("SELECT * FROM taches " +
+            "WHERE deadline IS NOT NULL AND deadline <= :limit AND status != 'DONE' " +
+            "ORDER BY deadline ASC LIMIT 2")
+    List<com.example.freelance.data.local.entity.Tache> getUrgentTasks(Date limit);
 
+    @Query("SELECT COUNT(*) FROM taches " +
+            "WHERE deadline IS NOT NULL AND deadline <= :limit AND status != 'DONE'")
+    int countUrgentTasks(Date limit);
     @Query("SELECT * FROM taches WHERE idTache = :id")
     Tache getById(String id);
 

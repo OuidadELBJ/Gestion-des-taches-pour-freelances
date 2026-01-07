@@ -18,10 +18,8 @@ public interface TimeEntryDao {
     // ----------------- CRUD -----------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TimeEntry timeEntry);
-
     @Update
     void update(TimeEntry timeEntry);
-
     @Delete
     void delete(TimeEntry timeEntry);
 
@@ -45,6 +43,11 @@ public interface TimeEntryDao {
     // ✅ Total durée d’une tâche
     @Query("SELECT COALESCE(SUM(duration), 0) FROM time_entries WHERE taskId = :taskId")
     long getTotalTask(String taskId);
+
+    @Query("SELECT COALESCE(SUM(duration), 0) FROM time_entries " +
+            "WHERE startTime >= :start AND startTime < :end " +
+            "AND endTime IS NOT NULL AND duration > 0")
+    long sumDuration(Date start, Date end);
 
     // ✅ Total durée d’un projet
     @Query("SELECT COALESCE(SUM(duration), 0) FROM time_entries WHERE projectId = :projectId")

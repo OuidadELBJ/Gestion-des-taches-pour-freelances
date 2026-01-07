@@ -20,7 +20,10 @@ public interface PaiementDao {
     // -------------------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Paiement paiement);
-
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM paiements WHERE paid = 1 AND date BETWEEN :start AND :end")
+    double sumPaidInPeriod(Date start, Date end);
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM paiements WHERE date BETWEEN :start AND :end")
+    double sumAllInPeriod(Date start, Date end);
     @Update
     void update(Paiement paiement);
 

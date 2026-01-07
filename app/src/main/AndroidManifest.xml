@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.freelance">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions (UNE SEULE FOIS chacune) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-
     <uses-permission
         android:name="android.permission.POST_NOTIFICATIONS"
         tools:targetApi="33" />
 
     <application
+        android:name=".FreelanceApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,28 +20,40 @@
         android:theme="@style/Theme.Freelance"
         tools:targetApi="31">
 
+        <!-- ✅ BootReceiver : UNE SEULE déclaration -->
+        <receiver
+            android:name="notifications.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ✅ AUTH : Login = launcher -->
         <activity
-            android:name=".MainActivity"
+            android:name=".AuthGateActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity" android:exported="false" />
-        <!-- Et ton écran NotificationsSettingsActivity (si ce n’est pas déjà fait) -->
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".SignupActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
 
+        <activity android:name=".ForgotPasswordActivity" android:exported="false" />
+
+
+
+        <activity android:name=".AccountActivity" android:exported="false" />
         <activity android:name=".HelpActivity" android:exported="false" />
         <activity android:name=".FaqActivity" android:exported="false" />
         <activity android:name="ui.settings.NotificationsSettingsActivity" android:exported="false" />
 
-        <activity
-            android:name=".AddProjectActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="ui.payments.AddPaymentActivity"
-            android:exported="false" />
+        <activity android:name=".AddProjectActivity" android:exported="false" />
+        <activity android:name="ui.payments.AddPaymentActivity" android:exported="false" />
 
         <service
             android:name="service.TimerForegroundService"

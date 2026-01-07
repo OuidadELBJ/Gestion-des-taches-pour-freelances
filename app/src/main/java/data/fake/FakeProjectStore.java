@@ -21,7 +21,7 @@ public class FakeProjectStore {
 
         Project p1 = new Project("p1", "E-Commerce Website");
         p1.billingType = Project.BILLING_PROJECT;
-        p1.budgetAmount = 2000;
+        p1.budgetAmount = 100;
         p1.deadlineMillis = now + TimeUnit.DAYS.toMillis(12);
         p1.status = "En cours";
         p1.clientName = "Client 1";

@@ -7,45 +7,163 @@ import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.example.freelance.data.local.AppDatabase;
+import com.example.freelance.data.local.entity.Paiement;
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.entity.Tache;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import data.fake.FakeProjectStore;
-import data.fake.FakeTaskStore;
-import data.modele.Project;
-import data.modele.Task;
 import data.prefs.ReminderPrefs;
 
 public class ReminderScheduler {
 
-    public static void rescheduleAll(Context c) {
-        ReminderPrefs prefs = ReminderPrefs.load(c);
+    private static final String TAG_REMINDER_ALL = "REMINDER_ALL";
 
-        if (!prefs.enabled) {
-            // Attention : ça annule tout WorkManager (ok dans ton cas)
-            WorkManager.getInstance(c).cancelAllWork();
-            return;
-        }
+    private static String tagTask(String taskId) { return "REMINDER_TASK_" + taskId; }
+    private static String tagProject(String projectId) { return "REMINDER_PROJECT_" + projectId; }
 
-        // Tasks
-        if (prefs.remindTasks) {
-            for (Task t : FakeTaskStore.get().listAll()) {
-                if (!t.reminderEnabled) continue;
-                scheduleForTask(c, t, prefs);
-            }
-        }
+    // ✅ NEW
+    private static String tagPayment(String paymentId) { return "REMINDER_PAYMENT_" + paymentId; }
 
-        // Projects
-        if (prefs.remindProjects) {
-            for (Project p : FakeProjectStore.get().list()) {
-                if (!p.reminderEnabled) continue;
-                scheduleForProject(c, p, prefs);
-            }
-        }
+    // =========================
+    // ✅ API publique (hooks)
+    // =========================
+
+    /** Appelle après insert/update d'une tâche */
+    public static void onTaskUpsert(Context c, Tache t) {
+        Context app = c.getApplicationContext();
+
+        cancelTask(app, t.getIdTache());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            ReminderPrefs prefs = ReminderPrefs.load(app);
+            if (!prefs.enabled || !prefs.remindTasks) return;
+
+            if (!t.isReminderEnabled() || t.getDeadline() == null) return;
+
+            AppDatabase db = AppDatabase.getInstance(app);
+            Projet p = db.projetDao().getById(t.getProjectId());
+
+            scheduleForTask(app, t, p, prefs);
+        });
     }
 
+    /** Appelle après delete d'une tâche */
+    public static void onTaskDeleted(Context c, String taskId) {
+        cancelTask(c.getApplicationContext(), taskId);
+    }
+
+    /** Appelle après insert/update d'un projet */
+    public static void onProjectUpsert(Context c, Projet p) {
+        Context app = c.getApplicationContext();
+
+        cancelProject(app, p.getIdProjet());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            ReminderPrefs prefs = ReminderPrefs.load(app);
+            if (!prefs.enabled || !prefs.remindProjects) return;
+
+            if (!p.isReminderEnabled() || p.getDeadline() == null) return;
+
+            scheduleForProject(app, p, prefs);
+        });
+    }
+
+    /** Appelle après delete d'un projet */
+    public static void onProjectDeleted(Context c, String projectId) {
+        cancelProject(c.getApplicationContext(), projectId);
+    }
+
+    // ✅ NEW : Paiement upsert/delete/cancel
+    public static void onPaymentUpsert(Context c, Paiement pay) {
+        Context app = c.getApplicationContext();
+
+        // toujours nettoyer avant
+        cancelPayment(app, pay.getIdPaiement());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            ReminderPrefs prefs = ReminderPrefs.load(app);
+            if (!prefs.enabled) return;
+
+            // si payé ou pas d'échéance => pas de rappel
+            if (pay.isPaid() || pay.getDueDate() == null) return;
+
+            scheduleForPayment(app, pay, prefs);
+        });
+    }
+
+    public static void onPaymentDeleted(Context c, String paymentId) {
+        cancelPayment(c.getApplicationContext(), paymentId);
+    }
+
+    public static void cancelPayment(Context c, String paymentId) {
+        WorkManager.getInstance(c).cancelAllWorkByTag(tagPayment(paymentId));
+    }
+
+    /** Cancel tous les reminders d’une tâche */
+    public static void cancelTask(Context c, String taskId) {
+        WorkManager.getInstance(c).cancelAllWorkByTag(tagTask(taskId));
+    }
+
+    /** Cancel tous les reminders d’un projet */
+    public static void cancelProject(Context c, String projectId) {
+        WorkManager.getInstance(c).cancelAllWorkByTag(tagProject(projectId));
+    }
+
+    // =========================
+    // ✅ Reschedule global (Room) - safe thread
+    // =========================
+    public static void rescheduleAll(Context c) {
+        Context app = c.getApplicationContext();
+
+        // On annule UNIQUEMENT les reminders
+        WorkManager.getInstance(app).cancelAllWorkByTag(TAG_REMINDER_ALL);
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            ReminderPrefs prefs = ReminderPrefs.load(app);
+            if (!prefs.enabled) return;
+
+            AppDatabase db = AppDatabase.getInstance(app);
+
+            // Tasks
+            if (prefs.remindTasks) {
+                List<Tache> tasks = db.tacheDao().getAll();
+                for (Tache t : tasks) {
+                    if (!t.isReminderEnabled()) continue;
+                    if (t.getDeadline() == null) continue;
+
+                    Projet p = db.projetDao().getById(t.getProjectId());
+                    scheduleForTask(app, t, p, prefs);
+                }
+            }
+
+            // Projects
+            if (prefs.remindProjects) {
+                List<Projet> projets = db.projetDao().getAll();
+                for (Projet p : projets) {
+                    if (!p.isReminderEnabled()) continue;
+                    if (p.getDeadline() == null) continue;
+
+                    scheduleForProject(app, p, prefs);
+                }
+            }
+
+            // ✅ NEW : Payments
+            List<Paiement> pays = db.paiementDao().getAll();
+            for (Paiement pay : pays) {
+                if (pay.isPaid()) continue;
+                if (pay.getDueDate() == null) continue;
+                scheduleForPayment(app, pay, prefs);
+            }
+        });
+    }
+
+    // (optionnel)
     public static void scheduleTestInSeconds(Context c, int seconds) {
         String workName = "REMINDER_TEST_" + seconds;
 
@@ -56,6 +174,7 @@ public class ReminderScheduler {
                 .build();
 
         OneTimeWorkRequest req = new OneTimeWorkRequest.Builder(ReminderWorker.class)
+                .addTag(TAG_REMINDER_ALL)
                 .setInitialDelay(Math.max(1, seconds), TimeUnit.SECONDS)
                 .setInputData(d)
                 .build();
@@ -64,88 +183,97 @@ public class ReminderScheduler {
     }
 
     // =========================
-    // ✅ TASK : priorité offsets
-    // Task custom > Project custom > Global prefs
+    // ✅ Scheduling - TASK / PROJECT / PAYMENT
     // =========================
-    private static void scheduleForTask(Context c, Task t, ReminderPrefs prefs) {
-        if (t.deadlineMillis <= 0L) return;
 
-        Project p = FakeProjectStore.get().getById(t.projectId);
+    private static void scheduleForTask(Context c, Tache t, Projet p, ReminderPrefs prefs) {
+        long deadlineMillis = t.getDeadline().getTime();
         long[] offsets = resolveOffsetsForTask(t, p, prefs);
         if (offsets.length == 0) return;
 
-        String projectName = (p == null ? t.projectId : p.name);
+        String projectName = (p == null ? t.getProjectId() : p.getName());
 
         for (long offset : offsets) {
-            long when = t.deadlineMillis - offset;
+            long when = deadlineMillis - offset;
             when = adjustTimeMode(when, prefs.atNine);
 
             enqueue(
                     c,
-                    uniqueName("TASK", t.id, offset),
+                    uniqueName("TASK", t.getIdTache(), offset),
                     "Rappel tâche",
-                    "Projet: " + projectName + " • " + t.title,
-                    when
+                    "Projet: " + projectName + " • " + t.getTitle(),
+                    when,
+                    TAG_REMINDER_ALL,
+                    tagTask(t.getIdTache()),
+                    tagProject(t.getProjectId())
             );
         }
     }
 
-    // =========================
-    // ✅ PROJECT : offsets projet custom ou global
-    // =========================
-    private static void scheduleForProject(Context c, Project p, ReminderPrefs prefs) {
-        if (p.deadlineMillis <= 0L) return;
-
+    private static void scheduleForProject(Context c, Projet p, ReminderPrefs prefs) {
+        long deadlineMillis = p.getDeadline().getTime();
         long[] offsets = resolveOffsetsForProject(p, prefs);
         if (offsets.length == 0) return;
 
         for (long offset : offsets) {
-            long when = p.deadlineMillis - offset;
+            long when = deadlineMillis - offset;
             when = adjustTimeMode(when, prefs.atNine);
 
             enqueue(
                     c,
-                    uniqueName("PROJECT", p.id, offset),
+                    uniqueName("PROJECT", p.getIdProjet(), offset),
                     "Rappel projet",
-                    "Deadline projet : " + p.name,
-                    when
+                    "Deadline projet : " + p.getName(),
+                    when,
+                    TAG_REMINDER_ALL,
+                    tagProject(p.getIdProjet())
             );
         }
     }
 
-    // =====================================================
-    // ✅ RESOLUTION OFFSETS (ROBUSTE + COMPAT)
-    // =====================================================
-    private static long[] resolveOffsetsForTask(Task t, Project p, ReminderPrefs prefs) {
-        // 1) Task override
-        long[] taskCustom = safeOffsets(t.customOffsetsMillis);
-        if (!t.useDefaultOffsets && taskCustom.length > 0) return taskCustom;
+    // ✅ NEW
+    private static void scheduleForPayment(Context c, Paiement pay, ReminderPrefs prefs) {
+        long dueMillis = pay.getDueDate().getTime();
 
-        // 2) Project override
+        long[] offsets = prefsOffsets(prefs);
+        if (offsets.length == 0) return;
+
+        for (long offset : offsets) {
+            long when = dueMillis - offset;
+            when = adjustTimeMode(when, prefs.atNine);
+
+            enqueue(
+                    c,
+                    uniqueName("PAYMENT", pay.getIdPaiement(), offset),
+                    "Rappel paiement",
+                    "Paiement : " + pay.getAmount() + "€",
+                    when,
+                    TAG_REMINDER_ALL,
+                    tagPayment(pay.getIdPaiement()),
+                    tagProject(pay.getProjectId()) // optionnel mais utile
+            );
+        }
+    }
+
+    // =========================
+    // ✅ Offsets
+    // =========================
+
+    private static long[] resolveOffsetsForTask(Tache t, Projet p, ReminderPrefs prefs) {
+        long[] taskCustom = parseOffsetsToMillis(t.getCustomOffsets());
+        if (!t.isUseDefaultOffsets() && taskCustom.length > 0) return taskCustom;
+
         if (p != null) {
-            long[] projectCustom = safeOffsets(p.customOffsetsMillis);
-            // compat si quelqu’un a rempli notifOffsetsMillis
-            if (projectCustom.length == 0) projectCustom = safeOffsets(p.notifOffsetsMillis);
-
-            boolean useProjectDefault = p.useDefaultOffsets; // true => global
-            // compat si quelqu’un utilise notifUseDefault
-            if (p.notifUseDefault == false) useProjectDefault = false;
-
-            if (!useProjectDefault && projectCustom.length > 0) return projectCustom;
+            long[] projectCustom = parseOffsetsToMillis(p.getCustomOffsets());
+            if (!p.isUseDefaultOffsets() && projectCustom.length > 0) return projectCustom;
         }
 
-        // 3) Global prefs
         return prefsOffsets(prefs);
     }
 
-    private static long[] resolveOffsetsForProject(Project p, ReminderPrefs prefs) {
-        long[] projectCustom = safeOffsets(p.customOffsetsMillis);
-        if (projectCustom.length == 0) projectCustom = safeOffsets(p.notifOffsetsMillis);
-
-        boolean useDefault = p.useDefaultOffsets;
-        if (p.notifUseDefault == false) useDefault = false;
-
-        if (!useDefault && projectCustom.length > 0) return projectCustom;
+    private static long[] resolveOffsetsForProject(Projet p, ReminderPrefs prefs) {
+        long[] projectCustom = parseOffsetsToMillis(p.getCustomOffsets());
+        if (!p.isUseDefaultOffsets() && projectCustom.length > 0) return projectCustom;
         return prefsOffsets(prefs);
     }
 
@@ -159,22 +287,36 @@ public class ReminderScheduler {
         return out;
     }
 
-    private static long[] safeOffsets(long[] arr) {
-        if (arr == null || arr.length == 0) return new long[0];
-        // on filtre <= 0
+    /**
+     * customOffsets stocké comme String: "7,3,1" (souvent en jours).
+     */
+    private static long[] parseOffsetsToMillis(String customOffsets) {
+        if (customOffsets == null || customOffsets.trim().isEmpty()) return new long[0];
+
+        String[] parts = customOffsets.split(",");
         List<Long> ok = new ArrayList<>();
-        for (long v : arr) if (v > 0) ok.add(v);
+
+        for (String s : parts) {
+            try {
+                long v = Long.parseLong(s.trim());
+                if (v <= 0) continue;
+
+                long millis = (v < 10_000_000L) ? TimeUnit.DAYS.toMillis(v) : v;
+                ok.add(millis);
+            } catch (Exception ignored) {}
+        }
+
         long[] out = new long[ok.size()];
         for (int i = 0; i < ok.size(); i++) out[i] = ok.get(i);
         return out;
     }
 
-    // =====================================================
-    // ✅ ENQUEUE
-    // =====================================================
-    private static void enqueue(Context c, String name, String title, String text, long whenMillis) {
+    // =========================
+    // ✅ Enqueue WorkManager
+    // =========================
+    private static void enqueue(Context c, String name, String title, String text, long whenMillis, String... tags) {
         long delay = whenMillis - System.currentTimeMillis();
-        if (delay < 5_000L) return; // déjà passé => ignore
+        if (delay < 5_000L) return;
 
         Data d = new Data.Builder()
                 .putString(ReminderWorker.KEY_TITLE, title)
@@ -182,12 +324,17 @@ public class ReminderScheduler {
                 .putInt(ReminderWorker.KEY_NOTIF_ID, Math.abs(name.hashCode()))
                 .build();
 
-        OneTimeWorkRequest req = new OneTimeWorkRequest.Builder(ReminderWorker.class)
+        OneTimeWorkRequest.Builder b = new OneTimeWorkRequest.Builder(ReminderWorker.class)
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .setInputData(d)
-                .build();
+                .setInputData(d);
 
-        WorkManager.getInstance(c).enqueueUniqueWork(name, ExistingWorkPolicy.REPLACE, req);
+        if (tags != null) {
+            for (String t : tags) {
+                if (t != null && !t.trim().isEmpty()) b.addTag(t);
+            }
+        }
+
+        WorkManager.getInstance(c).enqueueUniqueWork(name, ExistingWorkPolicy.REPLACE, b.build());
     }
 
     private static String uniqueName(String type, String id, long offset) {

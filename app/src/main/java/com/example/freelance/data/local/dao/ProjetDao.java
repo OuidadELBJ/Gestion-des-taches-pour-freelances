@@ -36,12 +36,16 @@ public interface ProjetDao {
     @Query("SELECT * FROM projets WHERE isSynced = 0")
     List<Projet> getUnsynced();
 
+    @Query("SELECT * FROM projets ORDER BY COALESCE(lastUpdated, deadline) DESC LIMIT 1")
+    Projet getLatest();
+
     @Query("UPDATE projets SET status = :status WHERE idProjet = :id")
     void updateStatus(String id, String status);
 
     @Query("SELECT * FROM projets WHERE status = :status")
     List<Projet> getByStatus(String status);
-
+    @Query("SELECT COUNT(*) FROM projets")
+    int countAllProjects();
     @Query("UPDATE projets SET hourlyRate = :rate, lastUpdated = :lastUpdated WHERE idProjet = :id")
     void updateHourlyRate(String id, double rate, Date lastUpdated);
 
@@ -50,6 +54,7 @@ public interface ProjetDao {
 
     @Query("SELECT * FROM projets WHERE deadline < :now AND status != 'DONE'")
     List<Projet> getOverdue(Date now);
+
 
     // ✅ NOTES PROJET (Option B)
     @Query("UPDATE projets SET description = :description, lastUpdated = :lastUpdated WHERE idProjet = :id")

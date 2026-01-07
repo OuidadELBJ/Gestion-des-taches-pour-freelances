@@ -14,6 +14,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.freelance.R;
+import java.util.concurrent.Executors;
+import com.example.freelance.data.local.AppDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -73,20 +75,42 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(this, MainActivity.class));
-                        finish();
+                        String uid = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+                        if (uid == null) {
+                            Toast.makeText(this, "Erreur: utilisateur introuvable", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        com.example.freelance.data.local.UserDataCleaner.ensureUserScope(this, uid, () -> {
+                            startActivity(new Intent(this, MainActivity.class));
+                            finish();
+                        });
+
                     } else {
                         Toast.makeText(this, "Erreur connexion : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+    private void openMain() {
+        runOnUiThread(() -> {
+            Intent i = new Intent(this, MainActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        });
+    }
 
     @Override
     public void onStart() {
         super.onStart();
+
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            String uid = mAuth.getCurrentUser().getUid();
+
+            com.example.freelance.data.local.UserDataCleaner.ensureUserScope(this, uid, () -> {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            });
         }
     }
 }
