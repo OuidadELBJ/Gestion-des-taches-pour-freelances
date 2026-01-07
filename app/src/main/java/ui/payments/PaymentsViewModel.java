@@ -2,9 +2,11 @@ package ui.payments;
 
 import android.content.Context;
 
-import com.example.freelance.data.local.repository.PaiementRepository;
-import com.example.freelance.data.mapper.PaymentMapper;
 import com.example.freelance.data.local.entity.Paiement;
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.repository.PaiementRepository;
+import com.example.freelance.data.local.repository.ProjetRepository;
+import com.example.freelance.data.mapper.PaymentMapper;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -14,9 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import data.fake.FakeProjectStore;
 import data.modele.Payment;
-import data.modele.Project;
 
 public class PaymentsViewModel {
 
@@ -31,50 +31,77 @@ public class PaymentsViewModel {
         public boolean filtered = false;
     }
 
-    private final PaiementRepository repo;
+    private final PaiementRepository paiementRepo;
+    private final ProjetRepository projetRepo;
 
     public PaymentsViewModel(Context context) {
-        repo = new PaiementRepository(context.getApplicationContext());
+        Context app = context.getApplicationContext();
+        paiementRepo = new PaiementRepository(app);
+        projetRepo = new ProjetRepository(app);
     }
 
-    // ✅ charge LIST + TOTAL (reçu) en 1 méthode
+    // ✅ charge LIST + TOTAL (reçu) + EXPECTED (depuis Projet Room)
     public void loadPayments(String projectId, Integer month0to11, Integer year, Callback<UiState> cb) {
         UiState state = new UiState();
 
-        // attendu (pour l’instant tu gardes FakeProjectStore)
-        Project p = FakeProjectStore.get().getById(projectId);
-        state.expected = (p != null) ? p.expectedAmount() : 0;
+        // 1) Charger le projet depuis Room pour expected
+        projetRepo.getById(projectId, projet -> {
+            state.expected = expectedAmount(projet);
 
-        if (month0to11 != null && year != null) {
-            state.filtered = true;
+            // 2) Charger les paiements + totaux
+            if (month0to11 != null && year != null) {
+                state.filtered = true;
 
-            Date start = monthStart(year, month0to11);
-            Date end = monthEnd(year, month0to11);
+                Date start = monthStart(year, month0to11);
+                Date end = monthEnd(year, month0to11);
 
-            repo.getByProjectBetween(projectId, start, end, entities -> {
-                state.list = mapList(entities);
+                paiementRepo.getByProjectBetween(projectId, start, end, entities -> {
+                    state.list = mapList(entities);
 
-                repo.getTotalPaidByProjectBetween(projectId, start, end, total -> {
-                    state.received = safe(total);
-                    state.remaining = remaining(state.expected, state.received);
-                    state.progressPercent = progressPercent(state.expected, state.received);
-                    cb.onResult(state);
+                    paiementRepo.getTotalPaidByProjectBetween(projectId, start, end, total -> {
+                        state.received = safe(total);
+                        state.remaining = remaining(state.expected, state.received);
+                        state.progressPercent = progressPercent(state.expected, state.received);
+                        cb.onResult(state);
+                    });
                 });
-            });
 
-        } else {
-            state.filtered = false;
+            } else {
+                state.filtered = false;
 
-            repo.getByProject(projectId, entities -> {
-                state.list = mapList(entities);
+                paiementRepo.getByProject(projectId, entities -> {
+                    state.list = mapList(entities);
 
-                repo.getTotalPaidByProject(projectId, total -> {
-                    state.received = safe(total);
-                    state.remaining = remaining(state.expected, state.received);
-                    state.progressPercent = progressPercent(state.expected, state.received);
-                    cb.onResult(state);
+                    paiementRepo.getTotalPaidByProject(projectId, total -> {
+                        state.received = safe(total);
+                        state.remaining = remaining(state.expected, state.received);
+                        state.progressPercent = progressPercent(state.expected, state.received);
+                        cb.onResult(state);
+                    });
                 });
-            });
+            }
+        });
+    }
+
+    // ===== Expected amount depuis Projet entity Room =====
+    private double expectedAmount(Projet p) {
+        if (p == null) return 0.0;
+
+        int billingType = p.getBillingType();
+        double budgetAmount = p.getBudgetAmount();
+        double rate = p.getRate();
+        double hours = p.getEstimatedHours();
+        double days = p.getEstimatedDays();
+        double months = p.getEstimatedMonths();
+
+        // 0 = PROJECT, 1 = HOUR, 2 = DAY, 3 = MONTH (selon ton commentaire)
+        switch (billingType) {
+            case 1: return rate * hours;
+            case 2: return rate * days;
+            case 3: return rate * months;
+            case 0:
+            default:
+                return budgetAmount;
         }
     }
 
@@ -146,31 +173,9 @@ public class PaymentsViewModel {
         return "⏳ En attente";
     }
 
-    // ✅ message de relance
     public String reminderMessage(Payment p) {
         String d = formatDate(p.dueDateMillis);
         return "Bonjour, petit rappel : la facture de " + money(p.amount) +
                 " arrive à échéance le " + d + ". Merci 🙂";
     }
-
-    public void debugInsertTestPayment(String projectId) {
-        if (projectId == null) return;
-
-        long now = System.currentTimeMillis();
-        long due = now + 2 * 24L * 60L * 60L * 1000L;
-
-        Payment test = new Payment(
-                "test_" + now,
-                projectId,
-                123.45,
-                now,
-                due,
-                false,
-                "TEST ROOM"
-        );
-
-        Paiement entity = PaymentMapper.toEntity(test);
-        repo.insert(entity);
-    }
-
 }

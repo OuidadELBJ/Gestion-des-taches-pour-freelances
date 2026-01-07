@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import data.fake.FakeProjectStore;
-import data.modele.Project;
 import ui.payments.AddPaymentActivity;
 import ui.payments.PaymentsAdapter;
 import ui.payments.PaymentsViewModel;
+
+import com.example.freelance.data.local.entity.Projet;
+import com.example.freelance.data.local.repository.ProjetRepository;
 
 public class PaymentsFragment extends Fragment {
 
@@ -52,6 +53,26 @@ public class PaymentsFragment extends Fragment {
     // Wrappers cliquables
     private View rowProject, rowMonth, rowYear;
 
+    // ✅ Room Repo projets
+    private ProjetRepository projetRepo;
+
+    // ✅ Items spinner (pas de FakeProjectStore)
+    private final List<ProjectItem> projectItems = new ArrayList<>();
+    private ArrayAdapter<ProjectItem> projectsAdapter;
+
+    // Petit modèle pour le spinner
+    private static class ProjectItem {
+        final String id;
+        final String name;
+
+        ProjectItem(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        @Override public String toString() { return name; }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,10 +85,8 @@ public class PaymentsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ✅ IMPORTANT : ViewModel Room a besoin du context
+        projetRepo = new ProjetRepository(requireContext());
         vm = new PaymentsViewModel(requireContext());
-        vm.debugInsertTestPayment(selectedProjectId);
-
 
         toolbar = view.findViewById(R.id.toolbarPayments);
         toolbar.setTitle("Paiements");
@@ -106,7 +125,7 @@ public class PaymentsFragment extends Fragment {
         rowYear.setOnClickListener(v -> spinnerYear.performClick());
 
         setupProjectsFromArgsIfAny();
-        setupProjects();
+        setupProjectsSpinnerAdapter();
         setupMonthYear();
 
         btnAdd.setOnClickListener(v -> {
@@ -127,13 +146,15 @@ public class PaymentsFragment extends Fragment {
             loadPayments();
         });
 
-        loadPayments();
+        // ✅ Charge les projets depuis Room, puis charge les paiements
+        loadProjectsFromRoom();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadPayments();
+        // ✅ recharger tout (projets + paiements) en cas d’ajout
+        loadProjectsFromRoom();
     }
 
     private void setupProjectsFromArgsIfAny() {
@@ -146,37 +167,69 @@ public class PaymentsFragment extends Fragment {
         }
     }
 
-    private void setupProjects() {
-        List<Project> projects = FakeProjectStore.get().list();
-        ArrayAdapter<Project> ad = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_spinner_item, projects);
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerProjects.setAdapter(ad);
+    private void setupProjectsSpinnerAdapter() {
+        projectsAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                projectItems
+        );
+        projectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerProjects.setAdapter(projectsAdapter);
 
         spinnerProjects.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                Project p = (Project) parent.getItemAtPosition(position);
+                ProjectItem p = (ProjectItem) parent.getItemAtPosition(position);
                 selectedProjectId = p.id;
                 loadPayments();
             }
             @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
         });
+    }
 
-        if (!projects.isEmpty()) {
+    private void loadProjectsFromRoom() {
+        projetRepo.getAll(projets -> {
+            projectItems.clear();
+
+            if (projets != null) {
+                for (Projet p : projets) {
+                    String name = (p.getName() == null || p.getName().trim().isEmpty())
+                            ? "(Sans nom)"
+                            : p.getName();
+                    projectItems.add(new ProjectItem(p.getIdProjet(), name));
+                }
+            }
+
+            projectsAdapter.notifyDataSetChanged();
+
+            if (projectItems.isEmpty()) {
+                selectedProjectId = null;
+                adapter.submit(new ArrayList<>());
+                tvTotalReceived.setText("Reçu : 0 €");
+                tvExpected.setText("Attendu : 0 €");
+                tvRemaining.setText("Reste : 0 €");
+                progress.setProgress(0);
+                tvEmpty.setVisibility(View.VISIBLE);
+                Toast.makeText(requireContext(), "Aucun projet en base. Ajoute un projet d’abord.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // ✅ sélectionner le bon projet (args ou premier)
             int index = 0;
             if (selectedProjectId != null) {
-                for (int i = 0; i < projects.size(); i++) {
-                    if (selectedProjectId.equals(projects.get(i).id)) {
+                for (int i = 0; i < projectItems.size(); i++) {
+                    if (selectedProjectId.equals(projectItems.get(i).id)) {
                         index = i;
                         break;
                     }
                 }
             } else {
-                selectedProjectId = projects.get(0).id;
+                selectedProjectId = projectItems.get(0).id;
             }
+
             spinnerProjects.setSelection(index);
-        }
+            // loadPayments() est appelé par onItemSelected automatiquement
+        });
     }
 
     private void setupMonthYear() {
@@ -225,7 +278,6 @@ public class PaymentsFragment extends Fragment {
         if (selectedProjectId == null) return;
 
         vm.loadPayments(selectedProjectId, filterMonth, filterYear, state -> {
-
             adapter.submit(state.list);
 
             if (state.filtered) {
