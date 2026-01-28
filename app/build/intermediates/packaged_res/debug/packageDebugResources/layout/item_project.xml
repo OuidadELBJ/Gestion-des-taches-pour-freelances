@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardProject"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/cardBackground"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Ligne 1 : nom + badge + chevron -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textProjectName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Site web client A"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary" />
+
+            <!-- Badge statut -->
+            <TextView
+                android:id="@+id/textStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:text="En cours"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@color/cardBackground"
+                android:textColor="@color/color_primary" />
+
+            <!-- Chevron -->
+            <ImageView
+                android:id="@+id/iconChevron"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/textSecondary" />
+        </LinearLayout>
+
+        <!-- Ligne 2 : client -->
+        <TextView
+            android:id="@+id/textClient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Client A"
+            android:textSize="13sp"
+            android:textColor="@color/textSecondary" />
+
+        <!-- Ligne 3 : deadline + budget + temps -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textDeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deadline : 15/01/2026"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+
+            <TextView
+                android:id="@+id/textBudget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="• 1 200 €"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+
+            <TextView
+                android:id="@+id/textTrackedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="• 5h suivies"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+        </LinearLayout>
+
+        <!-- Ligne 4 : progression -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/progressProject"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="40"
+                android:progressTint="@color/color_primary"
+                android:backgroundTint="@color/color_primary_container" />
+
+            <TextView
+                android:id="@+id/textProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="40%"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+        </LinearLayout>
+
+        <!-- Ligne 5 : résumé -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textTasksSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tâches : 2/5"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+
+            <TextView
+                android:id="@+id/textLastActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Dernière activité : hier"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

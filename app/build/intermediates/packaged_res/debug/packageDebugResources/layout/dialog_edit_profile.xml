@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modifier le profil"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#1F2A44" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Mets à jour tes informations."
+        android:textSize="12sp"
+        android:textColor="#7B86A8" />
+
+    <!-- Nom -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Nom"
+        android:textSize="13sp"
+        android:textColor="#7B86A8" />
+
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ouidad Elbojaddaini"
+        android:textColor="#1F2A44"
+        android:textColorHint="#B0B7D0"
+        android:background="@android:color/transparent"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp" />
+
+    <!-- Rôle -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Rôle"
+        android:textSize="13sp"
+        android:textColor="#7B86A8" />
+
+    <EditText
+        android:id="@+id/editRole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Freelancer • Mobile &amp; Web"
+        android:textColor="#1F2A44"
+        android:textColorHint="#B0B7D0"
+        android:background="@android:color/transparent"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp" />
+
+</LinearLayout>

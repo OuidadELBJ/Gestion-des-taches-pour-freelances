@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:strokeWidth="1dp"
+    app:strokeColor="#E3E8F6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@android:drawable/ic_lock_idle_alarm"
+            android:tint="#2F5BFF"
+            android:contentDescription="Session"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textSessionRange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="02/01 23:27 → 02/01 23:28"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:textColor="#1F2A44"/>
+
+            <TextView
+                android:id="@+id/textSessionDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Durée : 00:01:23"
+                android:textSize="13sp"
+                android:textColor="#2F5BFF"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

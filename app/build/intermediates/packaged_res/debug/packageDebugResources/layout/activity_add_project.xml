@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6FB">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarAddProject"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2F5BFF"
+        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:navigationIconTint="@android:color/white"
+        app:title="Nouveau projet"
+        app:titleTextColor="@android:color/white" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="16dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Nom projet -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nom du projet*"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editProjectName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ex : Site web client A"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Client*"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editClientName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nom du client"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Email client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Email client (optionnel)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editClientEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="client@mail.com"
+                        android:inputType="textEmailAddress"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Téléphone client -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Téléphone client (optionnel)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editClientPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="+33612345678"
+                        android:inputType="phone"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Deadline -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Deadline*"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editDeadline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:hint="Choisir une date"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Statut -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Statut"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <Spinner
+                        android:id="@+id/spinnerStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Budget -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Budget prévu (€)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editBudget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="0"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Taux horaire -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Taux horaire (€/h, optionnel)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editHourlyRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="60"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Notes -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Notes"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#3C4C76" />
+
+                    <EditText
+                        android:id="@+id/editNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:hint="Détails, objectifs, contexte…"
+                        android:background="@android:color/transparent"
+                        android:textColor="#1F2A44"
+                        android:textColorHint="#9AA6C8"
+                        android:textSize="15sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="4dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/layoutButtonsBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCancelProject"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Annuler"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:strokeWidth="1dp"
+            app:strokeColor="#2F5BFF"
+            android:textColor="#2F5BFF"
+            android:backgroundTint="@android:color/white" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCreateProject"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Créer"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            app:backgroundTint="#2F5BFF" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

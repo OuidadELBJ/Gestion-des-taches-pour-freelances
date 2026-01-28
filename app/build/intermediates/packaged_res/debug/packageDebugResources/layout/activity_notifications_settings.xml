@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6FB">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarNotif"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2F5BFF"
+        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:title="Notifications"
+        app:titleTextColor="@android:color/white" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="16dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Carte principale -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rappels"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="#1F2A44"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Choisis quand recevoir les notifications (deadlines, tâches, projets)."
+                        android:textSize="12sp"
+                        android:textColor="#7B86A8"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/swRemindersEnabled"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Activer les rappels"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbRemindTasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rappeler pour les tâches"/>
+
+                    <CheckBox
+                        android:id="@+id/cbRemindProjects"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rappeler pour les projets"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="14dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Quand recevoir ?"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:textColor="#1F2A44"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cb10m"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="10 minutes avant"/>
+
+                    <CheckBox
+                        android:id="@+id/cb1h"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1 heure avant"/>
+
+                    <CheckBox
+                        android:id="@+id/cb1d"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1 jour avant"/>
+
+                    <CheckBox
+                        android:id="@+id/cb2d"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="2 jours avant"/>
+
+                    <CheckBox
+                        android:id="@+id/cb1w"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1 semaine avant"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbAtNine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Envoyer à 09:00 "/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Boutons -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveReminders"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="14dp"
+                android:text="Enregistrer"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                app:cornerRadius="18dp"
+                app:backgroundTint="#2F5BFF" />
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

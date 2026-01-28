@@ -1,0 +1,338 @@
+[
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_edit_task_notifications.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_edit_task_notifications.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_dashboard_header_bg.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/dashboard_header_bg.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_add_project.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_add_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_item_session.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/item_session.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_add_project.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_add_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/menu_menu_profile.xml.flat",
+        "source": "com.example.freelance.app-main-60:/menu/menu_profile.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_notifications_settings.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_notifications_settings.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_task_bullet.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_task_bullet.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_dashboard.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_account.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_account.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_activity_help.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/activity_help.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_timer.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_timer.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_badge_done.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_badge_done.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_item_task.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/item_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_add_task.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_add_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_project_detail.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_project_detail.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_edit_project_notifications.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_edit_project_notifications.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/menu_menu_project_detail.xml.flat",
+        "source": "com.example.freelance.app-main-60:/menu/menu_project_detail.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_project_list.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_project_list.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_timer.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_timer.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/xml_backup_rules.xml.flat",
+        "source": "com.example.freelance.app-main-60:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_project_stub.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_project_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_row_task_stub.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/row_task_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_chip_neutral.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_chip_neutral.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_repository_test.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_repository_test.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_item_project.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/item_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_item_project_task.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/item_project_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_arrow_drop_down.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_arrow_drop_down.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_forgot_password.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_forgot_password.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_person.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_person.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_main.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_projects_stub.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_projects_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_back.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_back.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_badge_priority.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_badge_priority.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_play.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_play.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_arrow_forward.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/arrow_forward.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_chevron_right.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_chevron_right.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_login.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_payments.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_payments.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_dialog_edit_profile.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/dialog_edit_profile.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_help.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_help.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_payments.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_payments.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.freelance.app-main-60:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.example.freelance.app-main-60:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_email.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_email.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/color_bottom_nav_text_tint.xml.flat",
+        "source": "com.example.freelance.app-main-60:/color/bottom_nav_text_tint.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_task_detail.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_task_detail.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_dialog_round.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_dialog_round.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_dashboard.png.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_dashboard.png"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_stats_payments.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_stats_payments.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_add.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_chip_status.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_chip_status.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/color_bottom_nav_icon_tint.xml.flat",
+        "source": "com.example.freelance.app-main-60:/color/bottom_nav_icon_tint.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_edit_project.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_edit_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_sms.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_sms.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_edit_task.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_edit_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_timer.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_timer.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_item_payment.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/item_payment.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_faq.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_faq.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_payments.png.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_payments.png"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_stats_time.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_stats_time.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_badge_late.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_badge_late.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_logo_app_freelencer.png.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/logo_app_freelencer.png"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_signup.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_activity_add_payment.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/activity_add_payment.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/navigation_nav_graph.xml.flat",
+        "source": "com.example.freelance.app-main-60:/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/layout_fragment_profile.xml.flat",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.freelance.app-main-60:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_projects.png.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_projects.png"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_ic_stats_projects.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/ic_stats_projects.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-debug-58:/drawable_bg_badge_in_progress.xml.flat",
+        "source": "com.example.freelance.app-main-60:/drawable/bg_badge_in_progress.xml"
+    }
+]

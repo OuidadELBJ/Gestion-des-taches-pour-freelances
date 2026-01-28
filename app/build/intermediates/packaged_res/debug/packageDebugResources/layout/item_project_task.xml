@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="@color/cardBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Ligne titre + priorité + checkbox -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textTaskTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Créer la maquette"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/textPriorityBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:text="Priorité"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@color/color_secondary"
+                android:textColor="@color/color_on_secondary" />
+
+            <CheckBox
+                android:id="@+id/checkTaskDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textTaskDeadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Deadline : 05/01/2026"
+            android:textSize="12sp"
+            android:textColor="@color/textSecondary" />
+
+        <TextView
+            android:id="@+id/textTaskStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="En cours"
+            android:textSize="12sp"
+            android:textColor="@color/textSecondary" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

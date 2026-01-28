@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboardFragment"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard" />
+
+    <item
+        android:id="@+id/projectListFragment"
+        android:title="Projets"
+        android:icon="@drawable/ic_projects" />
+
+    <item
+        android:id="@+id/timerFragment"
+        android:title="Timer"
+        android:icon="@drawable/ic_timer" />
+
+    <item
+        android:id="@+id/paymentsFragment"
+        android:title="Paiements"
+        android:icon="@drawable/ic_payments" />
+
+</menu>

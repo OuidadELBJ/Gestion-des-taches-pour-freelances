@@ -7,8 +7,6 @@ import android.os.Looper;
 
 import java.util.concurrent.Executors;
 
-import notifications.ReminderScheduler;
-
 public final class UserDataCleaner {
 
     private static final String PREFS = "user_scope_prefs";
@@ -16,53 +14,23 @@ public final class UserDataCleaner {
 
     private UserDataCleaner() {}
 
-    /**
-     * Appelle ça après login (ou au démarrage si déjà connecté).
-     * Si l'uid a changé => on wipe toute la DB locale + reminders.
-     */
     public static void ensureUserScope(Context context, String currentUid, Runnable onDone) {
         Context app = context.getApplicationContext();
 
         Executors.newSingleThreadExecutor().execute(() -> {
+            // On NE wipe PAS la DB, on NE touche PAS aux reminders.
+
+            // Optionnel: stocker le dernier uid (si tu veux garder l’info)
             SharedPreferences sp = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-            String lastUid = sp.getString(KEY_LAST_UID, null);
-
-            boolean changed = (lastUid == null) || (!lastUid.equals(currentUid));
-
-            if (changed) {
-                // 1) wipe Room
-                AppDatabase.getInstance(app).clearAllTables();
-
-                // 2) wipe reminders (WorkManager)
-                // rescheduleAll() commence par cancel TAG_REMINDER_ALL -> parfait
-                ReminderScheduler.rescheduleAll(app);
-
-                // 3) save new uid
+            if (currentUid != null) {
                 sp.edit().putString(KEY_LAST_UID, currentUid).apply();
             }
 
             new Handler(Looper.getMainLooper()).post(onDone);
         });
     }
-
-    /**
-     * Appelle ça au logout => wipe DB + remove uid cache.
-     */
     public static void clearOnLogout(Context context, Runnable onDone) {
-        Context app = context.getApplicationContext();
-
-        Executors.newSingleThreadExecutor().execute(() -> {
-            // wipe Room
-            AppDatabase.getInstance(app).clearAllTables();
-
-            // cancel reminders
-            ReminderScheduler.rescheduleAll(app);
-
-            // remove uid saved
-            SharedPreferences sp = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-            sp.edit().remove(KEY_LAST_UID).apply();
-
-            new Handler(Looper.getMainLooper()).post(onDone);
-        });
+        // On NE wipe PAS la DB, on NE cancel PAS les reminders.
+        new Handler(Looper.getMainLooper()).post(onDone);
     }
 }

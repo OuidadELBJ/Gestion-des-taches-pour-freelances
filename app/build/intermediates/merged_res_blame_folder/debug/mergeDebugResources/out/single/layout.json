@@ -1,0 +1,142 @@
+[
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_profile.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_timer.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_timer.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_project_stub.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_project_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_faq.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_faq.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_add_project.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_add_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_dashboard.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_help.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_help.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_payments.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_payments.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_payments.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_payments.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_signup.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_main.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_projects_stub.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_projects_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_add_task.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_add_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_project_list.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_project_list.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/item_project.xml",
+        "source": "com.example.freelance.app-main-60:/layout/item_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_add_project.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_add_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/item_project_task.xml",
+        "source": "com.example.freelance.app-main-60:/layout/item_project_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_repository_test.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_repository_test.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_timer.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_timer.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/item_session.xml",
+        "source": "com.example.freelance.app-main-60:/layout/item_session.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_account.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_account.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_forgot_password.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_forgot_password.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_edit_task_notifications.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_edit_task_notifications.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_project_detail.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_project_detail.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/item_payment.xml",
+        "source": "com.example.freelance.app-main-60:/layout/item_payment.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_add_payment.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_add_payment.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_task_detail.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_task_detail.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_login.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/dialog_edit_profile.xml",
+        "source": "com.example.freelance.app-main-60:/layout/dialog_edit_profile.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_edit_task.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_edit_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/row_task_stub.xml",
+        "source": "com.example.freelance.app-main-60:/layout/row_task_stub.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_notifications_settings.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_notifications_settings.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/fragment_edit_project.xml",
+        "source": "com.example.freelance.app-main-60:/layout/fragment_edit_project.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/item_task.xml",
+        "source": "com.example.freelance.app-main-60:/layout/item_task.xml"
+    },
+    {
+        "merged": "com.example.freelance.app-mergeDebugResources-57:/layout/activity_edit_project_notifications.xml",
+        "source": "com.example.freelance.app-main-60:/layout/activity_edit_project_notifications.xml"
+    }
+]

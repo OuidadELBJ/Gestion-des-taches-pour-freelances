@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Freelance" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+
+        <item name="colorPrimaryContainer">#020617</item>
+        <item name="colorOnPrimaryContainer">@color/color_on_primary_container</item>
+
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="colorSurface">#020617</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+
+        <item name="android:colorBackground">#020617</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">#020617</item>
+
+    </style>
+</resources>

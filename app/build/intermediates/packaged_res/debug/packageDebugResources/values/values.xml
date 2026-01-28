@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="project_status_array">
+        <item>En cours</item>
+        <item>En retard</item>
+        <item>Terminé</item>
+    </string-array>
+    <attr format="reference" name="materialNavigationBarStyle"/>
+    <attr format="color" name="navigationBarColor"/>
+    <color name="appBackground">@color/color_background</color>
+    <color name="backgroundGray">#F5F5F5</color>
+    <color name="black">#FF000000</color>
+    <color name="bottom_nav_icon_selected">@color/colorPrimary</color>
+    <color name="bottom_nav_icon_unselected">#9AA1B8</color>
+    <color name="bottom_nav_text_selected">@color/colorPrimary</color>
+    <color name="bottom_nav_text_unselected">#9AA1B8</color>
+    <color name="buttonDisabled">#B0B0B0</color>
+    <color name="cardBackground">@color/color_primary_container</color>
+    <color name="colorAccent">#1D3AA6 </color>
+    <color name="colorPrimary">#1D3AA6</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="color_background">#F5F7FF</color>
+    <color name="color_done_green">#2ECC71</color>
+    <color name="color_on_primary">#FFFFFFFF</color>
+    <color name="color_on_primary_container">#102347</color>
+    <color name="color_on_secondary">#FFFFFFFF</color>
+    <color name="color_on_surface">#1F2430</color>
+    <color name="color_primary">#2F5BFF</color>
+    <color name="color_primary_container">#E3EBFF</color>
+    <color name="color_secondary">#FF9800</color>
+    <color name="color_surface">#FFFFFFFF</color>
+    <color name="color_warning_orange">#FF8A00</color>
+    <color name="navBackground">#EEF0FF</color>
+    <color name="textDark">#000000</color>
+    <color name="textGray">#757575</color>
+    <color name="textHint">#555555</color>
+    <color name="textPrimary">@color/color_on_surface</color>
+    <color name="textSecondary">#7A8194</color>
+    <color name="white">#FFFFFF</color>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
+    <dimen name="item_spacing">12dp</dimen>
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="section_spacing">16dp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="touch_min_height">48dp</dimen>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_create_project">Créer le projet</string>
+    <string name="add_project">Ajouter un projet</string>
+    <string name="add_task">Ajouter une tâche</string>
+    <string name="app_name">Freelance</string>
+    <string name="badge_done">Terminé</string>
+    <string name="badge_overdue">En retard</string>
+    <string name="badge_priority">Priorité</string>
+    <string name="field_budget">Budget prévu</string>
+    <string name="field_client">Client</string>
+    <string name="field_deadline">Deadline</string>
+    <string name="field_hourly_rate">Taux horaire (optionnel)</string>
+    <string name="field_notes">Notes</string>
+    <string name="field_project_name">Nom du projet</string>
+    <string name="filter_all">Tous</string>
+    <string name="filter_billing">Facturation</string>
+    <string name="filter_done">Terminés</string>
+    <string name="filter_hint">Ouvrir les filtres des projets</string>
+    <string name="filter_in_progress">En cours</string>
+    <string name="filter_late">En retard</string>
+    <string name="gcm_defaultSenderId" translatable="false">263870340592</string>
+    <string name="google_api_key" translatable="false">AIzaSyBIg1qV4XkifuLoNxV8V6D8EkvNSME4Qxc</string>
+    <string name="google_app_id" translatable="false">1:263870340592:android:ecb296aa20fa38b8695135</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBIg1qV4XkifuLoNxV8V6D8EkvNSME4Qxc</string>
+    <string name="google_storage_bucket" translatable="false">freelanceapp2.firebasestorage.app</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_budget">Budget prévu</string>
+    <string name="label_client">Client</string>
+    <string name="label_deadline">Deadline</string>
+    <string name="label_enable_reminders">Activer les rappels</string>
+    <string name="label_hourly_rate">Taux horaire (optionnel)</string>
+    <string name="label_notes">Notes</string>
+    <string name="label_project_name">Nom du projet</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_payments">Paiements</string>
+    <string name="nav_projects">Projets</string>
+    <string name="nav_timer">Timer</string>
+    <string name="new_project">Nouveau projet</string>
+    <string name="payment_status_paid">Payé</string>
+    <string name="payment_status_pending">En attente</string>
+    <string name="project_detail_add_task">+ Ajouter une tâche</string>
+    <string name="project_detail_amount_paid">Payé</string>
+    <string name="project_detail_amount_planned">Prévu</string>
+    <string name="project_detail_amount_remaining">Restant</string>
+    <string name="project_detail_create_invoice">Créer une facture</string>
+    <string name="project_detail_deadline_label">Deadline</string>
+    <string name="project_detail_hourly_rate">Taux horaire</string>
+    <string name="project_detail_menu_archive">Archiver</string>
+    <string name="project_detail_menu_delete">Supprimer</string>
+    <string name="project_detail_menu_edit">Modifier le projet</string>
+    <string name="project_detail_payments_title">Paiements</string>
+    <string name="project_detail_progress">%1$d%%</string>
+    <string name="project_detail_start_timer">Démarrer le timer</string>
+    <string name="project_detail_status_label">Statut</string>
+    <string name="project_detail_tab_notes">Notes</string>
+    <string name="project_detail_tab_payments">Paiements</string>
+    <string name="project_detail_tab_tasks">Tâches</string>
+    <string name="project_detail_tab_time">Temps</string>
+    <string name="project_detail_tasks_sort_by_deadline">Par deadline</string>
+    <string name="project_detail_tasks_sort_by_priority">Par priorité</string>
+    <string name="project_detail_time_today">Aujourd’hui : %1$s</string>
+    <string name="project_detail_time_total">Total : %1$s</string>
+    <string name="project_detail_time_tracked">Temps suivi</string>
+    <string name="project_detail_time_week">Cette semaine : %1$s</string>
+    <string name="project_details">Détails du projet</string>
+    <string name="project_id" translatable="false">freelanceapp2</string>
+    <string name="project_new_budget_hint">Ex. 1 500 €</string>
+    <string name="project_new_budget_label">Budget prévu</string>
+    <string name="project_new_client_hint">Nom du client</string>
+    <string name="project_new_client_label">Client</string>
+    <string name="project_new_deadline_label">Deadline</string>
+    <string name="project_new_name_hint">Ex. Site vitrine client A</string>
+    <string name="project_new_name_label">Nom du projet</string>
+    <string name="project_new_notes_hint">Ajoutez des détails sur le projet…</string>
+    <string name="project_new_notes_label">Notes</string>
+    <string name="project_new_primary_cta">Créer le projet</string>
+    <string name="project_new_rate_hint">Ex. 60 €/h</string>
+    <string name="project_new_rate_label">Taux horaire (optionnel)</string>
+    <string name="project_new_reminders_frequency">Fréquence des rappels</string>
+    <string name="project_new_reminders_label">Activer les rappels</string>
+    <string name="project_new_secondary_cta">Annuler</string>
+    <string name="project_new_title">Nouveau projet</string>
+    <string name="projects_badge_archived">Archivé</string>
+    <string name="projects_badge_done">Terminé</string>
+    <string name="projects_badge_in_progress">En cours</string>
+    <string name="projects_badge_overdue">En retard</string>
+    <string name="projects_empty_subtitle">Créez votre premier projet pour commencer à suivre votre travail.</string>
+    <string name="projects_empty_title">Aucun projet pour l’instant</string>
+    <string name="projects_fab_new_project">Nouveau projet</string>
+    <string name="projects_filter_all">Tous</string>
+    <string name="projects_filter_billing">Facturation</string>
+    <string name="projects_filter_done">Terminés</string>
+    <string name="projects_filter_in_progress">En cours</string>
+    <string name="projects_filter_overdue">En retard</string>
+    <string name="projects_item_budget">Budget : %1$s</string>
+    <string name="projects_item_deadline">Deadline : %1$s</string>
+    <string name="projects_item_last_activity">Dernière activité : %1$s</string>
+    <string name="projects_item_progress">%1$d%%</string>
+    <string name="projects_item_tasks">Tâches : %1$d/%2$d</string>
+    <string name="projects_item_time_tracked">Temps suivi : %1$s</string>
+    <string name="projects_search_hint">Rechercher un client / projet…</string>
+    <string name="projects_subtitle">Vos projets en cours</string>
+    <string name="projects_title">Projets</string>
+    <string name="screen_new_project">Nouveau projet</string>
+    <string name="search_hint">Rechercher un client / projet…</string>
+    <string name="status_done">Terminé</string>
+    <string name="status_in_progress">En cours</string>
+    <string name="status_late">En retard</string>
+    <string name="subtitle_projects">Vos projets en cours</string>
+    <string name="tab_notes">Notes</string>
+    <string name="tab_payments">Paiements</string>
+    <string name="tab_tasks">Tâches</string>
+    <string name="tab_time">Temps</string>
+    <string name="task_status_done">Fait</string>
+    <string name="task_status_in_progress">En cours</string>
+    <string name="task_status_todo">À faire</string>
+    <string name="title_add_project">Nouveau projet</string>
+    <string name="title_projects">Projets</string>
+    <style name="AppDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <item name="android:background">@android:color/transparent</item>
+</style>
+    <style name="Theme.Freelance" parent="Theme.Material3.DayNight.NoActionBar">
+
+        
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+
+        <item name="colorPrimaryContainer">@color/color_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/color_on_primary_container</item>
+
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+
+        
+        
+        <item name="android:colorBackground">@color/color_background</item>
+
+        
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/navBackground</item>
+
+    </style>
+</resources>

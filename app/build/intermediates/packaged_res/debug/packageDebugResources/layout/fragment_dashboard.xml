@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackground"
+    android:padding="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ================= HEADER ================= -->
+        <LinearLayout
+            android:id="@+id/headerDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/color_primary"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="16dp">
+
+            <!-- Ligne logo + titre + avatar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/imageAppLogo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/logo_app_freelencer"
+                    android:contentDescription="@string/app_name" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/textDashboardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dashboard"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_on_primary" />
+
+                    <TextView
+                        android:id="@+id/textDashboardSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Voici le résumé d’aujourd’hui"
+                        android:textSize="12sp"
+                        android:textColor="#CCE3EBFF" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/imageProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="4dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/ic_person"
+                    app:tint="@color/color_on_primary"
+                    android:contentDescription="@string/app_name" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ================= CONTENT ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- =============== CARTES STATS =============== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStatsProjects"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="88dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/color_primary"
+                    app:cardBackgroundColor="@color/cardBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_stats_projects"
+                            android:tint="@color/color_primary" />
+
+                        <TextView
+                            android:id="@+id/textProjectsCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="6"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Projets"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStatsTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:minHeight="88dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/cardBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_stats_time"
+                            android:tint="@color/color_primary" />
+
+                        <TextView
+                            android:id="@+id/textTimeThisWeekValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="12h 30"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Temps"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStatsPayments"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:minHeight="88dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/cardBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_stats_payments"
+                            android:tint="@color/color_primary" />
+
+                        <TextView
+                            android:id="@+id/textPaymentsThisMonthValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="1 200 €"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Paiements"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- =============== TÂCHES DU JOUR =============== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Tâches du jour"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTodayTasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/color_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/textUrgentTasksTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="2 tâches à faire avant demain"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:background="@color/color_secondary"
+                            android:text="Priorité"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_on_secondary" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textTaskLine1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="• Finaliser maquette App mobile B"
+                        android:textSize="13sp"
+                        android:textColor="@color/textSecondary" />
+
+                    <TextView
+                        android:id="@+id/textTaskLine2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="• "
+                        android:textSize="13sp"
+                        android:textColor="@color/textSecondary" />
+
+                    <TextView
+                        android:id="@+id/textSeeAllTasks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Voir toutes les tâches"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_primary" />
+
+                    <ProgressBar
+                        android:id="@+id/progressUrgent"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_marginTop="10dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/color_primary"
+                        android:backgroundTint="@color/color_primary_container" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- =============== PROJETS RÉCENTS =============== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Projet récent"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRecentProject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/color_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/textRecentProjectTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="-"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="@color/textPrimary" />
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/textSecondary" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textRecentProjectSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="- tâches • - suivies • -€"
+                        android:textSize="13sp"
+                        android:textColor="@color/textSecondary" />
+
+                    <ProgressBar
+                        android:id="@+id/progressRecentProject"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_marginTop="8dp"
+                        android:progress="75"
+                        android:max="100"
+                        android:progressTint="@color/color_primary"
+                        android:backgroundTint="@color/color_primary_container" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

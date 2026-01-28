@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_edit_project"
+        android:title="Modifier" />
+    <item
+        android:id="@+id/action_archive_project"
+        android:title="Archiver" />
+    <item
+        android:id="@+id/action_delete_project"
+        android:title="Supprimer" />
+</menu>

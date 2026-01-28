@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swProjectEnabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activer rappel projet"/>
+
+        <CheckBox
+            android:id="@+id/cbProjectUseDefault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Utiliser paramètres par défaut (global)"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Offsets personnalisés (si défaut désactivé)"
+            android:textStyle="bold"
+            android:paddingTop="10dp"/>
+
+        <CheckBox android:id="@+id/cbP10m" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="10 minutes avant"/>
+        <CheckBox android:id="@+id/cbP1h"  android:layout_width="match_parent" android:layout_height="wrap_content" android:text="1 heure avant"/>
+        <CheckBox android:id="@+id/cbP1d"  android:layout_width="match_parent" android:layout_height="wrap_content" android:text="1 jour avant"/>
+        <CheckBox android:id="@+id/cbP2d"  android:layout_width="match_parent" android:layout_height="wrap_content" android:text="2 jours avant"/>
+        <CheckBox android:id="@+id/cbP1w"  android:layout_width="match_parent" android:layout_height="wrap_content" android:text="1 semaine avant"/>
+
+        <Button
+            android:id="@+id/btnSaveProjectNotif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enregistrer"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+</ScrollView>
