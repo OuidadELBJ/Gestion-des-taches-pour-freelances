@@ -29,13 +29,15 @@ Une solution Android native complète conçue pour aider les professionnels ind�
 ---
 
 ## Aperçu de l'Interface
-
+<img width="1080" height="2400" alt="login" src="https://github.com/user-attachments/assets/6afb4fb0-df4b-47ce-98b2-3fba4ea72649" />
+<img width="1080" height="2400" alt="newaCC" src="https://github.com/user-attachments/assets/8484da4b-7c7d-4ee1-b07b-6b20bcfeeab4" />
+<img width="1080" height="2400" alt="PageProjets" src="https://github.com/user-attachments/assets/47c817ec-0512-4e0c-83ef-3e01892735e2" />
 <img width="1080" height="2400" alt="CRUD Tache" src="https://github.com/user-attachments/assets/9d50d56e-6c4b-46af-a627-891e5b01edcc" />
 <img width="1080" height="2400" alt="profile" src="https://github.com/user-attachments/assets/78028f6f-3a0c-4bae-a998-031a05fc7561" />
 <img width="1080" height="2400" alt="Payment" src="https://github.com/user-attachments/assets/fa55ea52-6207-4b02-a557-0ff8f0c51707" />
-<img width="1080" height="2400" alt="PageProjets" src="https://github.com/user-attachments/assets/47c817ec-0512-4e0c-83ef-3e01892735e2" />
-<img width="1080" height="2400" alt="newaCC" src="https://github.com/user-attachments/assets/8484da4b-7c7d-4ee1-b07b-6b20bcfeeab4" />
-<img width="1080" height="2400" alt="login" src="https://github.com/user-attachments/assets/6afb4fb0-df4b-47ce-98b2-3fba4ea72649" />
+
+
+
 
 
 ---
